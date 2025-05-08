@@ -1,38 +1,35 @@
 <script lang="ts">
-  import { RadioGroup } from "bits-ui";
-  import { app } from "$lib/app/state.svelte";
+  import { fly } from "svelte/transition";
+  import { mode, toggleMode } from "mode-watcher";
 
-  import Logo from "~icons/lucide/box";
-  import PreviewIcon from "~icons/lucide/airplay";
-  import CodeIcon from "~icons/lucide/square-terminal";
-
-  $inspect(app.panel);
+  import ThemetteLogo from "~icons/lucide/box";
+  import GithubLogo from "~icons/lucide/github";
+  import SunIcon from "~icons/lucide/sun";
+  import MoonIcon from "~icons/lucide/moon";
 </script>
 
-<nav class="py-2.5">
-  <ul class="middle flex items-center justify-between">
-    <li><Logo /></li>
-    <RadioGroup.Root bind:value={app.panel} class="flex items-center gap-1">
-      {#snippet child({ props })}
-        <ul {...props}>
-          <li>
-            <RadioGroup.Item
-              class="p-1.5 rounded transition hocus:bg-background-100-900/50 data-[state=checked]:!bg-background-100-900/75"
-              value="preview"
-            >
-              <PreviewIcon />
-            </RadioGroup.Item>
-          </li>
-          <li>
-            <RadioGroup.Item
-              class="p-1.5 rounded transition hocus:bg-background-100-900/50 data-[state=checked]:!bg-background-100-900/75"
-              value="code"
-            >
-              <CodeIcon />
-            </RadioGroup.Item>
-          </li>
-        </ul>
-      {/snippet}
-    </RadioGroup.Root>
+<nav class="py-2.5 md:py-4">
+  <ul class="middle flex items-center gap-1">
+    <li>
+      <ThemetteLogo />
+    </li>
+    <li class="ml-auto">
+      <a class="transition block p-2 rounded-lg hover:bg-background-100-900" href="https://github.com/nasheomirro">
+        <GithubLogo />
+      </a>
+    </li>
+    <li>
+      <button class="transition grid p-2 rounded-lg hover:bg-background-100-900" onclick={toggleMode}>
+        {#if mode.current === "dark"}
+          <span class="col-start-1 row-start-1" in:fly={{ y: -10, delay: 100 }} out:fly={{ y: -10 }}>
+            <MoonIcon />
+          </span>
+        {:else}
+          <span class="col-start-1 row-start-1" in:fly={{ y: 10, delay: 100 }} out:fly={{ y: 10 }}>
+            <SunIcon />
+          </span>
+        {/if}
+      </button>
+    </li>
   </ul>
 </nav>
