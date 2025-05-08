@@ -8,8 +8,8 @@
   import MoonIcon from "~icons/lucide/moon";
 </script>
 
-<nav class="py-2.5 md:py-4">
-  <ul class="middle flex items-center gap-1">
+<nav class="h-14 flex items-center py-2.5 md:pt-3 border-b border-background-100-900 fixed top-0 left-0 w-full bg-background-50-950 z-40">
+  <ul class="middle flex items-center grow gap-1">
     <li>
       <ThemetteLogo />
     </li>

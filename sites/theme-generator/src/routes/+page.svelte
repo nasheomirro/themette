@@ -1,5 +1,15 @@
 <script>
-  import Navbar from "$lib/navbar/Navbar.svelte";
+  import MainShell from "$lib/layout/MainShell.svelte";
 </script>
 
-<Navbar />
+<MainShell>
+  {#snippet editor()}
+    <div>editor</div>
+  {/snippet}
+  {#snippet code()}
+    <div>code</div>
+  {/snippet}
+  {#snippet preview()}
+    <div>preview</div>
+  {/snippet}
+</MainShell>
