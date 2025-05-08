@@ -110,3 +110,11 @@
   --color-contrast-background-900-100: light-dark(var(--color-contrast-surface-900), var(--color-contrast-surface-100));
   --color-contrast-background-950-50: light-dark(var(--color-contrast-surface-950), var(--color-contrast-surface-50));
 }
+
+@custom-variant hocus (&:hover, &:focus);
+
+@utility middle {
+  @layer base {
+    @apply mx-auto max-w-[80rem] px-2.5;
+  }
+}

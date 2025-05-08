@@ -4,6 +4,7 @@ import { readTheme } from "./io/reader";
 import { writeTheme } from "./io/writer";
 
 class AppState {
+  panel = $state<"preview" | "code">("preview");
   theme = $state<ThemetteTheme>(readTheme(css));
   generated = $derived(writeTheme(this.theme));
 }
