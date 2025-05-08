@@ -1,0 +1,15 @@
+@theme {
+  /* Color Sets */
+  $$colors$$
+
+  /* Color Contrasts */
+  $$contrasts$$
+}
+
+@theme inline {
+  /* Color Pairs */
+  $$pairs$$
+
+  /* Color Contrast Pairs */
+  $$contrast-pairs$$
+}
