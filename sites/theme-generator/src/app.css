@@ -6,7 +6,26 @@
  */
 @import "$themes/themette.css";
 
+@font-face {
+  font-family: "Host Grotesk";
+  src: url("/HostGrotesk-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Host Grotesk";
+  src: url("/HostGrotesk-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Host Grotesk";
+  src: url("/HostGrotesk-Bold.ttf");
+  font-weight: 600;
+}
+
 @theme {
+  --default-font-family: "Host Grotesk", sans-serif;
   --color-*: initial;
   --color-transparent: transparent;
 
