@@ -13,7 +13,7 @@ export const colorShades = [
   "800",
   "900",
   "950",
-] satisfies ColorShade[];
+] as const satisfies ColorShade[];
 
 export const colorPairings = [
   ["50", "950"],

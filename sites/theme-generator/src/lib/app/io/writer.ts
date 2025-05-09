@@ -2,11 +2,20 @@ import { colorPairings, colorShades } from "../constants";
 import type { ThemetteTheme } from "../types";
 import boilerplate from "./boilerplate.txt?raw";
 
-export function writeTheme(theme: ThemetteTheme): {
+type DeepReadonly<T> = {
+  readonly [K in keyof T]: DeepReadonly<T[K]>;
+};
+
+/**
+ * converts a `ThemetteTheme` to it's css counterpart (raw and boilerplated).
+ * 
+ * Note that this function can take on "dirty" state that wasn't snapshotted. We make sure
+ * not to do any mutation. I am unsure if there is any performance benefit to doing this. 
+ */
+export function writeTheme(theme: DeepReadonly<ThemetteTheme>): {
   css: string;
   raw: string;
 } {
-  const keys = Object.keys(theme);
 
   let colors = "";
   let contrasts = "";
@@ -14,10 +23,13 @@ export function writeTheme(theme: ThemetteTheme): {
   let pairs = "";
   let contrastPairs = "";
 
-  for (let key of keys) {
+  for (let set of theme) {
+    const key = set.name;
+
     for (let shade of colorShades) {
-      const v = theme[key][shade];
-      const cv = theme[key].contrasts[shade];
+      const v = set[shade];
+      const cv = set.contrasts[shade];
+
       colors += color(key, shade, v);
       contrasts += contrast(key, shade, cv);
     }
