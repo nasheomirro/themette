@@ -25,7 +25,7 @@
     class="
       {app.mobilePanel === 'editor' ? 'max-md:block' : 'max-md:hidden'}
       max-md:col-start-1 max-md:row-start-1
-      md:min-h-[calc(100vh-3.5rem)] md:sticky top-14 md:border-r md:border-r-background-100-900 md:z-30
+      md:min-h-[calc(100vh-3.5rem)] md:sticky top-14 md:z-30
     "
   >
     {@render editor()}
