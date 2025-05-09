@@ -2,8 +2,9 @@ import { colorPairings, colorShades } from "../constants";
 import type { ThemetteTheme } from "../types";
 import boilerplate from "./boilerplate.txt?raw";
 
-type DeepReadonly<T> = {
-  readonly [K in keyof T]: DeepReadonly<T[K]>;
+/** there are better deep readonly implementations, this will do though. */
+type SimpleDeepReadOnly<T> = {
+  readonly [K in keyof T]: SimpleDeepReadOnly<T[K]>;
 };
 
 /**
@@ -12,7 +13,7 @@ type DeepReadonly<T> = {
  * Note that this function can take on "dirty" state that wasn't snapshotted. We make sure
  * not to do any mutation. I am unsure if there is any performance benefit to doing this. 
  */
-export function writeTheme(theme: DeepReadonly<ThemetteTheme>): {
+export function writeTheme(theme: SimpleDeepReadOnly<ThemetteTheme>): {
   css: string;
   raw: string;
 } {
