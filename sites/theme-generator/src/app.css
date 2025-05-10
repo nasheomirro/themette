@@ -1,9 +1,5 @@
 @import "tailwindcss";
 @plugin '@tailwindcss/forms';
-
-/* 
-  The default color palette for the project is themette.css
- */
 @import "$themes/themette.css";
 
 @font-face {
@@ -24,15 +20,18 @@
   font-weight: 600;
 }
 
-@utility middle {
-  @layer base {
-    @apply mx-auto px-4 max-w-[90rem];
-  }
-}
-
+@custom-variant dark (&:where(.dark, .dark *));
 @custom-variant hocus (&:hover, &:focus);
 
 @layer base {
+  :root {
+    color-scheme: light;
+
+    @variant dark {
+      color-scheme: dark;
+    }
+  }
+
   body {
     @apply text-background-950-50 bg-background-50-950;
   }
@@ -131,25 +130,91 @@
   --color-background-950-50: light-dark(var(--color-background-950), var(--color-background-50));
 
   /* Color Contrast Pairings */
-  --color-contrast-foreground-50-950: light-dark(var(--color-contrast-foreground-50), var(--color-contrast-foreground-950));
-  --color-contrast-foreground-100-900: light-dark(var(--color-contrast-foreground-100), var(--color-contrast-foreground-900));
-  --color-contrast-foreground-200-800: light-dark(var(--color-contrast-foreground-200), var(--color-contrast-foreground-800));
-  --color-contrast-foreground-300-700: light-dark(var(--color-contrast-foreground-300), var(--color-contrast-foreground-700));
-  --color-contrast-foreground-400-600: light-dark(var(--color-contrast-foreground-400), var(--color-contrast-foreground-600));
-  --color-contrast-foreground-600-400: light-dark(var(--color-contrast-foreground-600), var(--color-contrast-foreground-400));
-  --color-contrast-foreground-700-300: light-dark(var(--color-contrast-foreground-700), var(--color-contrast-foreground-300));
-  --color-contrast-foreground-800-200: light-dark(var(--color-contrast-foreground-800), var(--color-contrast-foreground-200));
-  --color-contrast-foreground-900-100: light-dark(var(--color-contrast-foreground-900), var(--color-contrast-foreground-100));
-  --color-contrast-foreground-950-50: light-dark(var(--color-contrast-foreground-950), var(--color-contrast-foreground-50));
+  --color-contrast-foreground-50-950: light-dark(
+    var(--color-contrast-foreground-50),
+    var(--color-contrast-foreground-950)
+  );
+  --color-contrast-foreground-100-900: light-dark(
+    var(--color-contrast-foreground-100),
+    var(--color-contrast-foreground-900)
+  );
+  --color-contrast-foreground-200-800: light-dark(
+    var(--color-contrast-foreground-200),
+    var(--color-contrast-foreground-800)
+  );
+  --color-contrast-foreground-300-700: light-dark(
+    var(--color-contrast-foreground-300),
+    var(--color-contrast-foreground-700)
+  );
+  --color-contrast-foreground-400-600: light-dark(
+    var(--color-contrast-foreground-400),
+    var(--color-contrast-foreground-600)
+  );
+  --color-contrast-foreground-600-400: light-dark(
+    var(--color-contrast-foreground-600),
+    var(--color-contrast-foreground-400)
+  );
+  --color-contrast-foreground-700-300: light-dark(
+    var(--color-contrast-foreground-700),
+    var(--color-contrast-foreground-300)
+  );
+  --color-contrast-foreground-800-200: light-dark(
+    var(--color-contrast-foreground-800),
+    var(--color-contrast-foreground-200)
+  );
+  --color-contrast-foreground-900-100: light-dark(
+    var(--color-contrast-foreground-900),
+    var(--color-contrast-foreground-100)
+  );
+  --color-contrast-foreground-950-50: light-dark(
+    var(--color-contrast-foreground-950),
+    var(--color-contrast-foreground-50)
+  );
 
-  --color-contrast-background-50-950: light-dark(var(--color-contrast-background-50), var(--color-contrast-background-950));
-  --color-contrast-background-100-900: light-dark(var(--color-contrast-background-100), var(--color-contrast-background-900));
-  --color-contrast-background-200-800: light-dark(var(--color-contrast-background-200), var(--color-contrast-background-800));
-  --color-contrast-background-300-700: light-dark(var(--color-contrast-background-300), var(--color-contrast-background-700));
-  --color-contrast-background-400-600: light-dark(var(--color-contrast-background-400), var(--color-contrast-background-600));
-  --color-contrast-background-600-400: light-dark(var(--color-contrast-background-600), var(--color-contrast-background-400));
-  --color-contrast-background-700-300: light-dark(var(--color-contrast-background-700), var(--color-contrast-background-300));
-  --color-contrast-background-800-200: light-dark(var(--color-contrast-background-800), var(--color-contrast-background-200));
-  --color-contrast-background-900-100: light-dark(var(--color-contrast-background-900), var(--color-contrast-background-100));
-  --color-contrast-background-950-50: light-dark(var(--color-contrast-background-950), var(--color-contrast-background-50));
+  --color-contrast-background-50-950: light-dark(
+    var(--color-contrast-background-50),
+    var(--color-contrast-background-950)
+  );
+  --color-contrast-background-100-900: light-dark(
+    var(--color-contrast-background-100),
+    var(--color-contrast-background-900)
+  );
+  --color-contrast-background-200-800: light-dark(
+    var(--color-contrast-background-200),
+    var(--color-contrast-background-800)
+  );
+  --color-contrast-background-300-700: light-dark(
+    var(--color-contrast-background-300),
+    var(--color-contrast-background-700)
+  );
+  --color-contrast-background-400-600: light-dark(
+    var(--color-contrast-background-400),
+    var(--color-contrast-background-600)
+  );
+  --color-contrast-background-600-400: light-dark(
+    var(--color-contrast-background-600),
+    var(--color-contrast-background-400)
+  );
+  --color-contrast-background-700-300: light-dark(
+    var(--color-contrast-background-700),
+    var(--color-contrast-background-300)
+  );
+  --color-contrast-background-800-200: light-dark(
+    var(--color-contrast-background-800),
+    var(--color-contrast-background-200)
+  );
+  --color-contrast-background-900-100: light-dark(
+    var(--color-contrast-background-900),
+    var(--color-contrast-background-100)
+  );
+  --color-contrast-background-950-50: light-dark(
+    var(--color-contrast-background-950),
+    var(--color-contrast-background-50)
+  );
+}
+
+@utility middle {
+  @layer base {
+    @apply mx-auto px-4 max-w-[90rem];
+  }
 }

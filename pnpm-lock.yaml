@@ -45,6 +45,9 @@ importers:
       '@iconify-json/lucide':
         specifier: ^1.2.41
         version: 1.2.41
+      '@iconify-json/lucide-lab':
+        specifier: ^1.2.3
+        version: 1.2.3
       '@sveltejs/adapter-auto':
         specifier: ^6.0.0
         version: 6.0.0(@sveltejs/kit@2.20.7(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.3(jiti@2.4.2)(lightningcss@1.29.2)))(svelte@5.28.2)(vite@6.3.3(jiti@2.4.2)(lightningcss@1.29.2)))
@@ -310,6 +313,9 @@ packages:
   '@humanwhocodes/retry@0.4.2':
     resolution: {integrity: sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==}
     engines: {node: '>=18.18'}
+
+  '@iconify-json/lucide-lab@1.2.3':
+    resolution: {integrity: sha512-N+8vnVt4IY/6FZi81f6nh5VhJSMYrs5KTVsT2Z/E0Wn7Lu4jJKO5fOfiTVX1YWVI4FFwQ1zVXPFb8kLAwskrjA==}
 
   '@iconify-json/lucide@1.2.41':
     resolution: {integrity: sha512-rOOahfHMgWPqLyRLvLSqEwCmS4jEDxB1Pk63QTe0GObLBKgYKlPmuc1zKYzSuPPkLX/ND7rScVOIDb//ggMNzg==}
@@ -1631,6 +1637,10 @@ snapshots:
   '@humanwhocodes/retry@0.3.1': {}
 
   '@humanwhocodes/retry@0.4.2': {}
+
+  '@iconify-json/lucide-lab@1.2.3':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify-json/lucide@1.2.41':
     dependencies:
