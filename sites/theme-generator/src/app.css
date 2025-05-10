@@ -32,8 +32,12 @@
     }
   }
 
+  .dnd * {
+    cursor: grabbing !important;
+  }
+
   body {
-    @apply text-background-950-50 bg-background-50-950;
+    @apply text-background-950-50 bg-background-50-950 overflow-x-hidden;
   }
 
   button:not(:disabled) {
