@@ -2,38 +2,27 @@
 @plugin '@tailwindcss/forms';
 @import "$themes/themette.css";
 
-@font-face {
-  font-family: "Host Grotesk";
-  src: url("/HostGrotesk-Regular.ttf");
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "Host Grotesk";
-  src: url("/HostGrotesk-Light.ttf");
-  font-weight: 300;
-}
-
-@font-face {
-  font-family: "Host Grotesk";
-  src: url("/HostGrotesk-Bold.ttf");
-  font-weight: 600;
-}
-
-@custom-variant dark (&:where(.dark, .dark *));
-@custom-variant hocus (&:hover, &:focus);
-
 @layer base {
-  :root {
-    color-scheme: light;
-
-    @variant dark {
-      color-scheme: dark;
-    }
+  @font-face {
+    font-family: "Host Grotesk";
+    src: url("/HostGrotesk-Regular.ttf");
+    font-weight: 400;
   }
 
-  .dnd * {
-    cursor: grabbing !important;
+  @font-face {
+    font-family: "Host Grotesk";
+    src: url("/HostGrotesk-Light.ttf");
+    font-weight: 300;
+  }
+
+  @font-face {
+    font-family: "Host Grotesk";
+    src: url("/HostGrotesk-Bold.ttf");
+    font-weight: 600;
+  }
+
+  :root {
+    @apply scheme-light dark:scheme-dark;
   }
 
   body {
@@ -222,3 +211,6 @@
     @apply mx-auto px-4 max-w-[90rem];
   }
 }
+
+@custom-variant hocus (&:hover, &:focus);
+@custom-variant dark (&:where(.dark, .dark *));

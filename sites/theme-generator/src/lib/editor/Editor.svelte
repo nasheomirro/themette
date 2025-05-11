@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { app } from "$lib/app/state.svelte";
-  import ColorSetsGroup from "./ColorSetPicker.svelte";
-
-  let value = $state(app.theme[0].name);
+  import ColorSetEditor from "./ColorSetEditor.svelte";
+  import ColorSetPicker from "./ColorSetPicker.svelte";
 </script>
 
-<ColorSetsGroup bind:value />
+<div class="space-y-10">
+  <ColorSetPicker />
+  <ColorSetEditor />
+</div>

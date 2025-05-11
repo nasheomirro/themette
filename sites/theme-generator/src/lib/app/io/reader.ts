@@ -1,5 +1,5 @@
 import { colorShades } from "../constants";
-import type { ColorFullSet, ColorSet, ColorShade, ThemetteTheme } from "../types";
+import type { ColorSet, ColorShadeObject, ColorShade, ThemetteTheme } from "../types";
 
 /**
  * Converts a css string to a `ThemetteTheme` if possible, throws an error if it fails.
@@ -37,36 +37,40 @@ export function readTheme(css: string): ThemetteTheme {
 
   const theme = sets.map((set) => {
     // create an object for the set
-    const colorSet: ColorFullSet = {} as ColorFullSet;
-    colorSet.contrasts = {} as ColorSet;
+    const colorSet: ColorSet = {} as ColorSet;
+    colorSet.contrasts = {} as ColorShadeObject;
     colorSet.name = set;
 
     // place the colors in
-    colors.filter((color) => color.set === set).forEach((color) => {
-      colorSet[color.shade as ColorShade] = color.value;
-    });
+    colors
+      .filter((color) => color.set === set)
+      .forEach((color) => {
+        colorSet[color.shade as ColorShade] = color.value;
+      });
 
     // place the contrasts in
-    contrasts.filter((contrast) => contrast.set === set).forEach((contrast) => {
-      colorSet.contrasts[contrast.shade as ColorShade] = contrast.value;
-    });
+    contrasts
+      .filter((contrast) => contrast.set === set)
+      .forEach((contrast) => {
+        colorSet.contrasts[contrast.shade as ColorShade] = contrast.value;
+      });
 
     return colorSet;
   });
 
-  if (!theme.every(set => isValidColorFullSet(set))) throw Error("Bad Read!");
+  if (!theme.every((set) => isColorSet(set))) throw Error("Bad Read!");
   return theme;
 }
 
-function isValidColorFullSet(set: any): set is ColorFullSet {
+function isColorSet(set: any): set is ColorSet {
   if (typeof set.name !== "string" || typeof set.contrasts !== "object") return false;
-  return isColorSet(set.contrasts) && isColorSet(set);
+  return isColorShadeObject(set.contrasts) && isColorShadeObject(set);
 }
 
 /**
- * Only checks if the given set fits a the `ColorSet` type, it does not check
+ * Only checks if the given set fits a the `ColorShadeObject` type, it does not check
  * if the values within is actually valid CSS.
  */
-function isColorSet(set: any): set is ColorSet {
+function isColorShadeObject(set: any): set is ColorShadeObject {
   return colorShades.every((shade) => typeof set[shade] === "string");
 }

@@ -7,17 +7,23 @@ type SimpleDeepReadOnly<T> = {
   readonly [K in keyof T]: SimpleDeepReadOnly<T[K]>;
 };
 
+type WriteThemeReturn = {
+  raw: string;
+  css: string;
+};
+
 /**
  * converts a `ThemetteTheme` to it's css counterpart (raw and boilerplated).
- * 
+ *
  * Note that this function can take on "dirty" state that wasn't snapshotted. We make sure
- * not to do any mutation. I am unsure if there is any performance benefit to doing this. 
+ * not to do any mutation. I am unsure if there is any performance benefit to doing this.
  */
-export function writeTheme(theme: SimpleDeepReadOnly<ThemetteTheme>): {
-  css: string;
-  raw: string;
-} {
-
+export function writeTheme(theme: SimpleDeepReadOnly<ThemetteTheme>, includeBoilerPlate: true): WriteThemeReturn;
+export function writeTheme(theme: SimpleDeepReadOnly<ThemetteTheme>, includeBoilerPlate?: false): string;
+export function writeTheme(
+  theme: SimpleDeepReadOnly<ThemetteTheme>,
+  includeBoilerPlate?: boolean,
+): string | WriteThemeReturn {
   let colors = "";
   let contrasts = "";
 
@@ -47,15 +53,19 @@ export function writeTheme(theme: SimpleDeepReadOnly<ThemetteTheme>): {
     contrastPairs += "\n";
   }
 
-  return {
-    // we do not need to add the pairs and contrast pairs.
-    raw: colors + contrasts,
-    css: boilerplate
-      .replace("$$colors$$", colors.trim())
-      .replace("$$contrasts$$", contrasts.trim())
-      .replace("$$pairs$$", pairs.trim())
-      .replace("$$contrast-pairs$$", contrastPairs.trim()),
-  };
+  const raw = colors + contrasts;
+  if (includeBoilerPlate) {
+    return {
+      raw,
+      css: boilerplate
+        .replace("$$colors$$", colors.trim())
+        .replace("$$contrasts$$", contrasts.trim())
+        .replace("$$pairs$$", pairs.trim())
+        .replace("$$contrast-pairs$$", contrastPairs.trim()),
+    };
+  }
+
+  return raw;
 }
 
 function color(set: string, shade: string, val: string) {

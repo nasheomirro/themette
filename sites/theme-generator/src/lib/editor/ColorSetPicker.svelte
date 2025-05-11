@@ -9,12 +9,6 @@
   import FlyIcon from "~icons/lucide-lab/butterfly";
   import HandleBarIcon from "~icons/lucide/align-justify";
 
-  type Props = {
-    value: string;
-  };
-
-  let { value = $bindable() }: Props = $props();
-
   const cursorPosition = new Spring({ x: 0, y: 0 }, { stiffness: 0.2, damping: 0.4 });
 
   // variables related to dragging
@@ -94,20 +88,17 @@
     // check for every item if cursor has entered them,
     // if so make it so we move the currently dragged item over.
     for (let i = 0; i < itemRects.length; i++) {
-      if (currentPosition !== i) {
-        if (movingTo !== i && isCursorInside(event, itemRects[i])) {
-          movingTo = i;
-          clearTimeout(debounceMoveTimeout);
+      if (currentPosition !== i && movingTo !== i && isCursorInside(event, itemRects[i])) {
+        movingTo = i;
+        clearTimeout(debounceMoveTimeout);
+        debounceMoveTimeout = setTimeout(() => {
+          app.reorderColorSet(currentPosition, i);
+          currentPosition = i;
 
-          debounceMoveTimeout = setTimeout(() => {
-            app.theme = moveItem(app.theme, currentPosition, i);
-            currentPosition = i;
-
-            // reset flip timeout here since this marks when items are flipping
-            clearTimeout(flippingTimeout);
-            flippingTimeout = setTimeout(() => (flippingTimeout = undefined), FLIP_DURATION);
-          }, DEBOUNCE_MOVE_DURATION);
-        }
+          // reset flip timeout here since this marks when items are flipping
+          clearTimeout(flippingTimeout);
+          flippingTimeout = setTimeout(() => (flippingTimeout = undefined), FLIP_DURATION);
+        }, DEBOUNCE_MOVE_DURATION);
       }
     }
   }
@@ -137,10 +128,10 @@
   }
 </script>
 
-<div class="p-4 space-y-6">
+<div class="space-y-6">
   <div class="space-y-2">
     <div class="text-2xl font-bold">Color Sets</div>
-    <p class="text-sm text-background-700-300">All the colors of your theme is placed here.</p>
+    <p class="text-sm text-background-700-300 font-light">All the colors of your theme is placed here.</p>
   </div>
   <div class="relative" bind:this={container}>
     <!-- added `overflow-y-hidden` to avoid firefox glitching -->
@@ -153,8 +144,8 @@
           data-set={set.name}
         >
           <button
-            onclick={() => (value = set.name)}
-            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {value ===
+            onclick={() => (app.currentSet = set.name)}
+            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {app.currentSet ===
               set.name && '!bg-background-100-900'}"
           >
             <span class="bg-(--self) rounded-lg w-7 h-7"></span>
