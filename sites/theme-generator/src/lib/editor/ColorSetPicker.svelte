@@ -144,7 +144,7 @@
   </div>
   <div class="relative" bind:this={container}>
     <!-- added `overflow-y-hidden` to avoid firefox glitching -->
-    <ul class="space-y-2 overflow-y-hidden">
+    <ul class="space-y-2 overflow-y-clip py-1">
       {#each app.theme as set, i (set.name)}
         <li
           animate:flip={{ duration: FLIP_DURATION }}
