@@ -3,7 +3,7 @@
   import { Spring } from "svelte/motion";
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-  import { app } from "$lib/app/state.svelte";
+  import { app, ui } from "$lib/app/state.svelte";
   import { isCursorInside, passive } from "./utils";
 
   import FlyIcon from "~icons/lucide-lab/butterfly";
@@ -145,8 +145,8 @@
           data-set
         >
           <button
-            onclick={() => (app.currentId = set.id)}
-            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {app.currentId ===
+            onclick={() => (ui.currentId = set.id)}
+            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {ui.currentId ===
               set.id && '!bg-background-100-900'}"
           >
             <span class="bg-(--self) rounded-lg w-7 h-7"></span>

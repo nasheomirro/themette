@@ -2,25 +2,11 @@ import css from "$themes/themette.css?raw";
 import type { ColorSet, DeepReadonly, ThemetteTheme } from "./types";
 import { readTheme } from "./io/reader";
 
-class PanelState {
-  mobile = $state<"preview" | "editor" | "generated">("editor");
-  desktop = $state<"preview" | "generated">("generated");
-}
-
 class AppState {
   #theme = $state<ThemetteTheme>(readTheme(css));
-  currentId = $state<string>(this.#theme[0].id);
-  currentIndex = $derived.by(() => {
-    const i = this.#theme.findIndex((set) => set.id === this.currentId);
-    return i !== -1 ? i : 0;
-  });
 
   get theme(): DeepReadonly<ThemetteTheme> {
     return this.#theme;
-  }
-
-  get currentSet(): DeepReadonly<ColorSet> {
-    return this.#theme[this.currentIndex];
   }
 
   updateColorSet(id: string, updates: Partial<Omit<ColorSet, "id">>) {
@@ -47,5 +33,35 @@ class AppState {
   }
 }
 
+type CurrentPanelObj = {
+  mobile: "preview" | "editor" | "generated";
+  desktop: "preview" | "generated";
+};
+
+class UIState {
+  #app: AppState;
+
+  /** determines the current active panel for both mobile and desktop */
+  panel = $state<CurrentPanelObj>({
+    mobile: "editor",
+    desktop: "preview",
+  });
+
+  currentId = $state<string>("");
+  currentIndex = $derived.by(() => {
+    const i = this.#app.theme.findIndex((set) => set.id === this.currentId);
+    return i !== -1 ? i : 0;
+  });
+
+  get currentSet() {
+    return this.#app.theme[this.currentIndex];
+  }
+
+  constructor(app: AppState) {
+    this.#app = app;
+    this.currentId = app.theme[0].id;
+  }
+}
+
 export const app = new AppState();
-export const panel = new PanelState();
+export const ui = new UIState(app);
