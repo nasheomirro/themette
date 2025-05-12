@@ -41,7 +41,13 @@ importers:
       mode-watcher:
         specifier: ^1.0.6
         version: 1.0.6(svelte@5.28.2)
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
     devDependencies:
+      '@iconify-json/cuida':
+        specifier: ^1.2.2
+        version: 1.2.2
       '@iconify-json/lucide':
         specifier: ^1.2.41
         version: 1.2.41
@@ -313,6 +319,9 @@ packages:
   '@humanwhocodes/retry@0.4.2':
     resolution: {integrity: sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==}
     engines: {node: '>=18.18'}
+
+  '@iconify-json/cuida@1.2.2':
+    resolution: {integrity: sha512-brr2HO5ooQHwl2WaBR9plP/l9VnFW0CfmthJaruHBhGXIXk6Yb+OuYXeyuqwQNzvV7swzBoCZBWEpyoz6XZnRw==}
 
   '@iconify-json/lucide-lab@1.2.3':
     resolution: {integrity: sha512-N+8vnVt4IY/6FZi81f6nh5VhJSMYrs5KTVsT2Z/E0Wn7Lu4jJKO5fOfiTVX1YWVI4FFwQ1zVXPFb8kLAwskrjA==}
@@ -1121,6 +1130,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@5.1.5:
+    resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -1637,6 +1651,10 @@ snapshots:
   '@humanwhocodes/retry@0.3.1': {}
 
   '@humanwhocodes/retry@0.4.2': {}
+
+  '@iconify-json/cuida@1.2.2':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify-json/lucide-lab@1.2.3':
     dependencies:
@@ -2411,6 +2429,8 @@ snapshots:
   ms@2.1.3: {}
 
   nanoid@3.3.11: {}
+
+  nanoid@5.1.5: {}
 
   natural-compare@1.4.0: {}
 

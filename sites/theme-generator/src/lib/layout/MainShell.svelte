@@ -20,7 +20,7 @@
 
 <Navbar />
 
-<div class="middle grid items-start md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_2fr] xl:grid-cols-[1fr_3fr] pt-14">
+<div class="centered-container grid items-start md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_2fr] xl:grid-cols-[1fr_3fr] pt-14">
   <div
     class="
       {panel.mobile === 'editor' ? 'max-md:block' : 'max-md:hidden'}

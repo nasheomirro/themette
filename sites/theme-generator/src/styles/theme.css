@@ -1,39 +1,3 @@
-@import "tailwindcss";
-@plugin '@tailwindcss/forms';
-@import "$themes/themette.css";
-
-@layer base {
-  @font-face {
-    font-family: "Host Grotesk";
-    src: url("/HostGrotesk-Regular.ttf");
-    font-weight: 400;
-  }
-
-  @font-face {
-    font-family: "Host Grotesk";
-    src: url("/HostGrotesk-Light.ttf");
-    font-weight: 300;
-  }
-
-  @font-face {
-    font-family: "Host Grotesk";
-    src: url("/HostGrotesk-Bold.ttf");
-    font-weight: 600;
-  }
-
-  :root {
-    @apply scheme-light dark:scheme-dark;
-  }
-
-  body {
-    @apply text-background-950-50 bg-background-50-950 overflow-x-hidden;
-  }
-
-  button:not(:disabled) {
-    cursor: pointer;
-  }
-}
-
 @theme {
   --default-font-family: "Host Grotesk", sans-serif;
 
@@ -205,12 +169,3 @@
     var(--color-contrast-background-50)
   );
 }
-
-@utility middle {
-  @layer base {
-    @apply mx-auto px-4 max-w-[90rem];
-  }
-}
-
-@custom-variant hocus (&:hover, &:focus);
-@custom-variant dark (&:where(.dark, .dark *));

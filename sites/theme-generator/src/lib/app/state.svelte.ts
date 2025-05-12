@@ -1,5 +1,5 @@
 import css from "$themes/themette.css?raw";
-import type { ThemetteTheme } from "./types";
+import type { ColorSet, DeepReadonly, ThemetteTheme } from "./types";
 import { readTheme } from "./io/reader";
 
 class PanelState {
@@ -9,11 +9,26 @@ class PanelState {
 
 class AppState {
   #theme = $state<ThemetteTheme>(readTheme(css));
-  currentSet = $state<string>(this.#theme[0].name);
-  currentIndex = $derived(this.#theme.findIndex((set) => set.name === this.currentSet) || 0);
+  currentId = $state<string>(this.#theme[0].id);
+  currentIndex = $derived.by(() => {
+    const i = this.#theme.findIndex((set) => set.id === this.currentId);
+    return i !== -1 ? i : 0;
+  });
 
-  get theme() {
+  get theme(): DeepReadonly<ThemetteTheme> {
     return this.#theme;
+  }
+
+  get currentSet(): DeepReadonly<ColorSet> {
+    return this.#theme[this.currentIndex];
+  }
+
+  updateColorSet(id: string, updates: Partial<Omit<ColorSet, "id">>) {
+    const index = this.#theme.findIndex((set) => set.id === id);
+    if (index !== -1) {
+      const set = this.#theme[index];
+      this.#theme[index] = { ...set, ...updates };
+    }
   }
 
   /**

@@ -1,0 +1,12 @@
+@utility centered-container {
+  @layer base {
+    @apply mx-auto px-4 max-w-[90rem];
+  }
+}
+
+/* Forms */
+@utility label-text {
+  @layer base {
+    @apply text-xs text-background-700-300;
+  }
+}

@@ -1,0 +1,31 @@
+@layer base {
+  @font-face {
+    font-family: "Host Grotesk";
+    src: url("/HostGrotesk-Regular.ttf");
+    font-weight: 400;
+  }
+
+  @font-face {
+    font-family: "Host Grotesk";
+    src: url("/HostGrotesk-Light.ttf");
+    font-weight: 300;
+  }
+
+  @font-face {
+    font-family: "Host Grotesk";
+    src: url("/HostGrotesk-Bold.ttf");
+    font-weight: 600;
+  }
+
+  :root {
+    @apply scheme-light dark:scheme-dark;
+  }
+
+  body {
+    @apply text-background-950-50 bg-background-50-950 overflow-x-hidden;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}

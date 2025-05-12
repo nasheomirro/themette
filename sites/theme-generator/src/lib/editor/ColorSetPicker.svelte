@@ -4,7 +4,7 @@
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
   import { app } from "$lib/app/state.svelte";
-  import { isCursorInside, moveItem, passive } from "./utils";
+  import { isCursorInside, passive } from "./utils";
 
   import FlyIcon from "~icons/lucide-lab/butterfly";
   import HandleBarIcon from "~icons/lucide/align-justify";
@@ -136,17 +136,17 @@
   <div class="relative" bind:this={container}>
     <!-- added `overflow-y-hidden` to avoid firefox glitching -->
     <ul class="space-y-2 overflow-y-clip py-1">
-      {#each app.theme as set, i (set.name)}
+      {#each app.theme as set, i (set.id)}
         <li
           animate:flip={{ duration: FLIP_DURATION }}
           style="--self: {set[500]}"
           class="relative z-0 transition {currentDraggedSet === set.name && 'opacity-50 scale-95'}"
-          data-set={set.name}
+          data-set
         >
           <button
-            onclick={() => (app.currentSet = set.name)}
-            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {app.currentSet ===
-              set.name && '!bg-background-100-900'}"
+            onclick={() => (app.currentId = set.id)}
+            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {app.currentId ===
+              set.id && '!bg-background-100-900'}"
           >
             <span class="bg-(--self) rounded-lg w-7 h-7"></span>
             <span>{set.name}</span>

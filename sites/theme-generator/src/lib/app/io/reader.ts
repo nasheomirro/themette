@@ -1,4 +1,5 @@
 import { colorShades } from "../constants";
+import { nanoid } from "nanoid";
 import type { ColorSet, ColorShadeObject, ColorShade, ThemetteTheme } from "../types";
 
 /**
@@ -40,6 +41,7 @@ export function readTheme(css: string): ThemetteTheme {
     const colorSet: ColorSet = {} as ColorSet;
     colorSet.contrasts = {} as ColorShadeObject;
     colorSet.name = set;
+    colorSet.id = nanoid();
 
     // place the colors in
     colors
