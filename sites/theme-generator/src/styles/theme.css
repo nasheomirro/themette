@@ -1,12 +1,10 @@
 @theme {
   --default-font-family: "Host Grotesk", sans-serif;
 
-  --font-weight-*: initial;
   --font-weight-light: 300;
   --font-weight-normal: 400;
   --font-weight-bold: 600;
 
-  --color-*: initial;
   --color-transparent: transparent;
 
   /* 

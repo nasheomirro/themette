@@ -13,3 +13,7 @@
   /* Color Contrast Pairs */
   $$contrast-pairs$$
 }
+
+/*
+  themette-internal $$internal$$
+*/

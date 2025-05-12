@@ -145,8 +145,8 @@
           data-set
         >
           <button
-            onclick={() => (ui.currentId = set.id)}
-            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {ui.currentId ===
+            onclick={() => (ui.selectedSetId = set.id)}
+            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {ui.selectedSetId ===
               set.id && '!bg-background-100-900'}"
           >
             <span class="bg-(--self) rounded-lg w-7 h-7"></span>

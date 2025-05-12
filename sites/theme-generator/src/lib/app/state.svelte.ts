@@ -1,9 +1,17 @@
 import css from "$themes/themette.css?raw";
-import type { ColorSet, DeepReadonly, ThemetteTheme } from "./types";
+import type { ColorSet, DeepReadonly, InternalOptions, ThemetteTheme } from "./types";
 import { readTheme } from "./io/reader";
 
+const { theme: defaultTheme, options: _options } = readTheme(css);
+
+const options: InternalOptions = {
+  background: "surface",
+  foreground: "primary",
+  ..._options,
+};
+
 class AppState {
-  #theme = $state<ThemetteTheme>(readTheme(css));
+  #theme = $state<ThemetteTheme>(defaultTheme);
 
   get theme(): DeepReadonly<ThemetteTheme> {
     return this.#theme;
@@ -47,19 +55,30 @@ class UIState {
     desktop: "preview",
   });
 
-  currentId = $state<string>("");
-  currentIndex = $derived.by(() => {
-    const i = this.#app.theme.findIndex((set) => set.id === this.currentId);
-    return i !== -1 ? i : 0;
-  });
+  /** the id of the selected set, this only matters in the current UI layout */
+  selectedSetId = $state<string>()!;
+  /** the id of the color set to be used as `foreground` */
+  foregroundSetId = $state<string>()!;
+  /** the id of the color set to be used as `background` */
+  backgroundSetId = $state<string>()!;
 
-  get currentSet() {
-    return this.#app.theme[this.currentIndex];
-  }
+  selectedSet = $derived.by(() => {
+    const index = this.#app.theme.findIndex((set) => set.id === this.selectedSetId);
+    return this.#app.theme[index] || this.#app.theme[0];
+  });
 
   constructor(app: AppState) {
     this.#app = app;
-    this.currentId = app.theme[0].id;
+
+    this.selectedSetId = app.theme[0].id;
+
+    this.foregroundSetId = (
+      app.theme[app.theme.findIndex((set) => set.name === options.foreground)] || app.theme[0]
+    )?.id;
+
+    this.backgroundSetId = (
+      app.theme[app.theme.findIndex((set) => set.name === options.background)] || app.theme[app.theme.length - 1]
+    ).id;
   }
 }
 

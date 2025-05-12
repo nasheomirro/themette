@@ -1,5 +1,5 @@
 import { colorPairings, colorShades } from "../constants";
-import type { DeepReadonly, ThemetteTheme } from "../types";
+import type { DeepReadonly, InternalOptions, ThemetteTheme } from "../types";
 import boilerplate from "./boilerplate.txt?raw";
 
 type WriteThemeReturn = {
@@ -13,12 +13,9 @@ type WriteThemeReturn = {
  * Note that this function can take on "dirty" state that wasn't snapshotted. We make sure
  * not to do any mutation. I am unsure if there is any performance benefit to doing this.
  */
-export function writeTheme(theme: DeepReadonly<ThemetteTheme>, includeBoilerPlate: true): WriteThemeReturn;
-export function writeTheme(theme: DeepReadonly<ThemetteTheme>, includeBoilerPlate?: false): string;
-export function writeTheme(
-  theme: DeepReadonly<ThemetteTheme>,
-  includeBoilerPlate?: boolean,
-): string | WriteThemeReturn {
+export function writeTheme(theme: DeepReadonly<ThemetteTheme>): string;
+export function writeTheme(theme: DeepReadonly<ThemetteTheme>, options: InternalOptions): WriteThemeReturn;
+export function writeTheme(theme: DeepReadonly<ThemetteTheme>, options?: InternalOptions): string | WriteThemeReturn {
   let colors = "";
   let contrasts = "";
 
@@ -49,14 +46,15 @@ export function writeTheme(
   }
 
   const raw = colors + contrasts;
-  if (includeBoilerPlate) {
+  if (options) {
     return {
       raw,
       css: boilerplate
         .replace("$$colors$$", colors.trim())
         .replace("$$contrasts$$", contrasts.trim())
         .replace("$$pairs$$", pairs.trim())
-        .replace("$$contrast-pairs$$", contrastPairs.trim()),
+        .replace("$$contrast-pairs$$", contrastPairs.trim())
+        .replace("$$internal$$", internal(options.background, options.foreground)),
     };
   }
 
@@ -76,4 +74,8 @@ function pair(set: string, light: string, dark: string) {
 }
 function contrastPair(set: string, light: string, dark: string) {
   return `  --color-${set}-contrast-${light}-${dark}: light-dark(var(--color-${set}-contrast-${light}), var(--color-${set}-contrast-${dark}));\n`;
+}
+
+function internal(background: string, foreground: string) {
+  return `foreground:${foreground},background:${background}`;
 }

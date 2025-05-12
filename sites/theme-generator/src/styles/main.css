@@ -1,10 +1,11 @@
 @import "tailwindcss";
 @plugin '@tailwindcss/forms';
 
+@import "$styles/base.css";
+
 @import "$themes/themette.css";
 @import "$styles/theme.css";
 @import "$styles/utils.css";
-@import "$styles/base.css";
 
 @custom-variant hocus (&:hover, &:focus);
 @custom-variant dark (&:where(.dark, .dark *));

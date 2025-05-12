@@ -1,3 +1,9 @@
+/* resets tailwind stuff */
+@theme {
+  --color-*: initial;
+  --font-weight-*: initial;
+}
+
 @layer base {
   @font-face {
     font-family: "Host Grotesk";
