@@ -72,6 +72,7 @@
   }
 
   function onDragging(event: MouseEvent) {
+    event.preventDefault();
     moveCursorPosition(event);
 
     // make sure no flips are happening before updating the list we use for calculations
