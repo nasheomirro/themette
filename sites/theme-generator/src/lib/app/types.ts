@@ -12,9 +12,9 @@ export type ThemetteTheme = ColorSet[];
 /** an object that holds the ids of the color sets used by the UI */
 export type UISetIds = {
   /** The currently selected set's id. */
-  selectedId: string;
+  selectedId: string | null;
   /** the id of the set that would be used for overriding the `--color-foreground-*` colors */
-  foregroundId: string;
+  foregroundId: string | null;
   /** the id of the set that would be used for overriding the `--color-background-*` colors */
-  backgroundId: string;
+  backgroundId: string | null;
 };

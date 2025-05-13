@@ -36,8 +36,9 @@ class AppState {
    * @param key the set id you want to update
    * @param value the id of the set
    */
-  updateUISetId(key: keyof UISetIds, value: string) {
-    if (this.#sets.find((set) => set.id === value)) {
+  updateUISetId(key: keyof UISetIds, value: string | null) {
+    if (value === null) this.#ids[key] = value;
+    else if (this.#sets.find((set) => set.id === value)) {
       this.#ids[key] = value;
     }
   }
@@ -52,6 +53,31 @@ class AppState {
     if (index !== -1) {
       const set = this.#sets[index];
       this.#sets[index] = { ...set, ...updates };
+    }
+  }
+
+  deleteColorSet(id: string) {
+    const index = this.getIndexFromId(id);
+    if (index === -1) return;
+
+    // filter out the color set
+    this.#sets = this.#sets.filter((set) => set.id !== id);
+
+    // for selected ids, try moving the selection one index down/up or set to null if empty
+    if (this.#ids.selectedId === id) {
+      let i = index < this.#sets.length ? index : index - 1; // note the set already got shifted
+      let id = this.#sets[i] ? this.#sets[i].id : null;
+      this.updateUISetId("selectedId", id);
+    }
+    // same for the foreground id
+    if (this.#ids.foregroundId === id) {
+      let i = index < this.#sets.length ? index : index - 1; // note the set already got shifted
+      let id = this.#sets[i] ? this.#sets[i].id : null;
+      this.updateUISetId("foregroundId", id);
+    }
+    // for the background id, we should just set it to null
+    if (this.#ids.backgroundId === id) {
+      this.updateUISetId("backgroundId", null);
     }
   }
 
