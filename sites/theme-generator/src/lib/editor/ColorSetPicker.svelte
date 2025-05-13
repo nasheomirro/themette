@@ -1,7 +1,7 @@
 <!-- A somewhat rudimentary and yet slightly hacky dnd'abble list -->
 <script lang="ts">
   import { Spring } from "svelte/motion";
-  import { scale } from "svelte/transition";
+  import { scale, fade } from "svelte/transition";
   import { flip } from "svelte/animate";
 
   import { app } from "$lib/app/app.svelte";
@@ -136,13 +136,12 @@
     <p class="text-sm text-background-700-300 font-light">All the colors of your theme is placed here.</p>
   </div>
   <div class="relative" bind:this={container}>
-    <ul class="py-1">
+    <ul class="space-y-2 py-1">
       {#each app.sets as set, i (set.id)}
         <li
-          transition:scale={{ start: 0.8 }}
           animate:flip={{ duration: FLIP_DURATION }}
           style="--self: {set[500]}"
-          class="relative not-first:mt-2 z-0 transition {currentDraggedSet === set.name && 'opacity-50 scale-95'}"
+          class="relative z-0 transition {currentDraggedSet === set.name && 'opacity-50 scale-95'}"
           data-set
         >
           <button
