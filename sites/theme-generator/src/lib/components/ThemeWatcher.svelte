@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writeTheme } from "$lib/app/io/writer";
-  import { app } from "$lib/app/state.svelte";
+  import { app } from "$lib/app/app.svelte";
 
-  const internalVariables = $derived(writeTheme(app.theme));
-  $effect(() => document.documentElement.setAttribute("style", internalVariables));
+  const { raw } = $derived(writeTheme(app.sets));
+  $effect(() => document.documentElement.setAttribute("style", raw));
 </script>

@@ -97,7 +97,3 @@
   --color-surface-contrast-900-100: light-dark(var(--color-surface-contrast-900), var(--color-surface-contrast-100));
   --color-surface-contrast-950-50: light-dark(var(--color-surface-contrast-950), var(--color-surface-contrast-50));
 }
-
-/*
-  themette-internal,foreground:primary,background:surface
-*/

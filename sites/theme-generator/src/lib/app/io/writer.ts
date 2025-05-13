@@ -1,7 +1,10 @@
-import { colorPairings, colorShades } from "../constants";
-import type { DeepReadonly, InternalOptions, ThemetteTheme } from "../types";
 import boilerplate from "./boilerplate.txt?raw";
 
+import { colorPairings, colorShades } from "../constants";
+import type { DeepReadonly } from "../types.utils";
+import type { ThemetteTheme } from "../types";
+
+/** the object returned from `writeTheme` */
 type WriteThemeReturn = {
   raw: string;
   css: string;
@@ -13,9 +16,7 @@ type WriteThemeReturn = {
  * Note that this function can take on "dirty" state that wasn't snapshotted. We make sure
  * not to do any mutation. I am unsure if there is any performance benefit to doing this.
  */
-export function writeTheme(theme: DeepReadonly<ThemetteTheme>): string;
-export function writeTheme(theme: DeepReadonly<ThemetteTheme>, options: InternalOptions): WriteThemeReturn;
-export function writeTheme(theme: DeepReadonly<ThemetteTheme>, options?: InternalOptions): string | WriteThemeReturn {
+export function writeTheme(theme: DeepReadonly<ThemetteTheme>): WriteThemeReturn {
   let colors = "";
   let contrasts = "";
 
@@ -46,19 +47,14 @@ export function writeTheme(theme: DeepReadonly<ThemetteTheme>, options?: Interna
   }
 
   const raw = colors + contrasts;
-  if (options) {
-    return {
-      raw,
-      css: boilerplate
-        .replace("$$colors$$", colors.trim())
-        .replace("$$contrasts$$", contrasts.trim())
-        .replace("$$pairs$$", pairs.trim())
-        .replace("$$contrast-pairs$$", contrastPairs.trim())
-        .replace("$$internal$$", internal(options.background, options.foreground)),
-    };
-  }
-
-  return raw;
+  return {
+    raw,
+    css: boilerplate
+      .replace("$$colors$$", colors.trim())
+      .replace("$$contrasts$$", contrasts.trim())
+      .replace("$$pairs$$", pairs.trim())
+      .replace("$$contrast-pairs$$", contrastPairs.trim()),
+  };
 }
 
 function color(set: string, shade: string, val: string) {
@@ -74,8 +70,4 @@ function pair(set: string, light: string, dark: string) {
 }
 function contrastPair(set: string, light: string, dark: string) {
   return `  --color-${set}-contrast-${light}-${dark}: light-dark(var(--color-${set}-contrast-${light}), var(--color-${set}-contrast-${dark}));\n`;
-}
-
-function internal(background: string, foreground: string) {
-  return `foreground:${foreground},background:${background}`;
 }

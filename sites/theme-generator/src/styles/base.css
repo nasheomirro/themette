@@ -1,7 +1,14 @@
-/* resets tailwind stuff */
 @theme {
   --color-*: initial;
   --font-weight-*: initial;
+
+  --default-font-family: "Host Grotesk", sans-serif;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-bold: 600;
+
+  --color-transparent: transparent;
 }
 
 @layer base {

@@ -3,9 +3,10 @@
   import { Spring } from "svelte/motion";
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-  import { app, ui } from "$lib/app/state.svelte";
+  
+  import { app } from "$lib/app/app.svelte";
   import { isCursorInside, passive } from "./utils";
-
+  
   import FlyIcon from "~icons/lucide-lab/butterfly";
   import HandleBarIcon from "~icons/lucide/align-justify";
 
@@ -137,7 +138,7 @@
   <div class="relative" bind:this={container}>
     <!-- added `overflow-y-hidden` to avoid firefox glitching -->
     <ul class="space-y-2 overflow-y-clip py-1">
-      {#each app.theme as set, i (set.id)}
+      {#each app.sets as set, i (set.id)}
         <li
           animate:flip={{ duration: FLIP_DURATION }}
           style="--self: {set[500]}"
@@ -145,9 +146,9 @@
           data-set
         >
           <button
-            onclick={() => (ui.selectedSetId = set.id)}
-            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {ui.selectedSetId ===
-              set.id && '!bg-background-100-900'}"
+            onclick={() => app.updateUISetId("selectedId", set.id)}
+            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {app.ids
+              .selectedId === set.id && '!bg-background-100-900'}"
           >
             <span class="bg-(--self) rounded-lg w-7 h-7"></span>
             <span>{set.name}</span>

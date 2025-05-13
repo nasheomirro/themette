@@ -1,6 +1,6 @@
 <script>
-    import Editor from "$lib/editor/Editor.svelte";
-  import MainShell from "$lib/layout/MainShell.svelte";
+  import Editor from "$lib/editor/Editor.svelte";
+  import MainShell from "$lib/shell/MainShell.svelte";
 </script>
 
 <MainShell>

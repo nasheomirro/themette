@@ -1,10 +1,10 @@
+/* Note do not change the order unless it makes sense */
 @import "tailwindcss";
 @plugin '@tailwindcss/forms';
 
 @import "$styles/base.css";
-
-@import "$themes/themette.css";
-@import "$styles/theme.css";
+@import "$styles/themes/themette.css";
+@import "$styles/themes/ui.css";
 @import "$styles/utils.css";
 
 @custom-variant hocus (&:hover, &:focus);
