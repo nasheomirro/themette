@@ -5,11 +5,10 @@
   import { flip } from "svelte/animate";
 
   import { app } from "$lib/app/app.svelte";
-  import { isCursorInside, passive } from "./utils";
+  import { isCursorInside, nonpassive } from "./utils";
 
   import AddIcon from "~icons/lucide/plus";
   import FlyIcon from "~icons/lucide-lab/butterfly";
-  import HandleBarIcon from "~icons/lucide/align-justify";
 
   const cursorPosition = new Spring({ x: 0, y: 0 }, { stiffness: 0.2, damping: 0.4 });
 
@@ -20,6 +19,11 @@
   let container: HTMLElement;
   let itemRects: DOMRect[] = [];
 
+  // variables related to enabling dragging
+  const DRAG_THRESHOLD = 5;
+  let couldDragStartX = 0;
+  let couldDragStartY = 0;
+
   // moving-related variables
   const FLIP_DURATION = 200;
   const DEBOUNCE_MOVE_DURATION = 50;
@@ -27,12 +31,66 @@
   let debounceMoveTimeout: number | undefined;
   let flippingTimeout: number | undefined; // not a boolean but used like one
 
-  function onDragStart(event: MouseEvent, set: string, index: number) {
-    event.preventDefault();
-
-    isDragging = true;
+  function onCouldDragStart(event: MouseEvent, set: string, index: number) {
+    couldDragStartX = event.clientX;
+    couldDragStartY = event.clientY;
     currentDraggedSet = set;
     currentPosition = index;
+
+    document.addEventListener("mousemove", onCouldDragging);
+    document.addEventListener("mouseup", onCouldDragEnd);
+    document.addEventListener("touchmove", onCouldTouchDragging, { passive: false });
+    document.addEventListener("touchend", onCouldDragEnd);
+    document.addEventListener("visibilitychange", onCouldDragEnd);
+  }
+
+  function onCouldDragTouchStart(event: TouchEvent, set: string, index: number) {
+    if (event.touches.length > 1) return; // Ignore multi-touch
+    const touch = event.touches[0];
+    onCouldDragStart(
+      {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+        preventDefault: () => event.preventDefault(),
+      } as unknown as MouseEvent,
+      set,
+      index,
+    );
+  }
+
+  function onCouldDragging(event: MouseEvent) {
+    event.preventDefault();
+    const dx = event.clientX - couldDragStartX;
+    const dy = event.clientY - couldDragStartY;
+    if (Math.sqrt(dx * dx + dy * dy) > DRAG_THRESHOLD) {
+      onDragStart(event);
+    }
+  }
+
+  function onCouldTouchDragging(event: TouchEvent) {
+    if (event.touches.length > 1 || !event.cancelable) return; // Ignore multi-touch
+    const touch = event.touches[0];
+    onCouldDragging({
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+      preventDefault: () => event.preventDefault(),
+    } as unknown as MouseEvent);
+  }
+
+  function onCouldDragEnd() {
+    document.removeEventListener("mousemove", onCouldDragging);
+    document.removeEventListener("mouseup", onCouldDragEnd);
+    document.removeEventListener("touchmove", onCouldTouchDragging);
+    document.removeEventListener("touchend", onCouldDragEnd);
+    document.removeEventListener("visibilitychange", onCouldDragEnd);
+  }
+
+  function onDragStart(event: MouseEvent) {
+    event.preventDefault();
+
+    // leave could drag phase and enter dragging phase
+    isDragging = true;
+    onCouldDragEnd();
 
     // add event listeners for dragging
     document.addEventListener("mousemove", onDragging);
@@ -58,9 +116,9 @@
 
     document.removeEventListener("mousemove", onDragging);
     document.removeEventListener("mouseup", onDragEnd);
-    document.removeEventListener("visibilitychange", onDragEnd);
     document.removeEventListener("touchmove", onTouchDragging);
     document.removeEventListener("touchend", onDragEnd);
+    document.removeEventListener("visibilitychange", onDragEnd);
   }
 
   function moveCursorPosition(coords: { clientX: number; clientY: number }, instant?: boolean) {
@@ -102,20 +160,6 @@
     }
   }
 
-  function onTouchDragStart(e: TouchEvent, set: string, index: number) {
-    if (e.touches.length > 1) return; // Ignore multi-touch
-    const touch = e.touches[0];
-    onDragStart(
-      {
-        clientX: touch.clientX,
-        clientY: touch.clientY,
-        preventDefault: () => e.preventDefault(),
-      } as unknown as MouseEvent,
-      set,
-      index,
-    );
-  }
-
   function onTouchDragging(e: TouchEvent) {
     if (e.touches.length > 1) return;
     const touch = e.touches[0];
@@ -133,44 +177,43 @@
     <p class="text-sm text-background-700-300 font-light">All the colors of your theme is placed here.</p>
   </div>
   <div class="relative" bind:this={container}>
-    <ul class="space-y-2">
+    <ul class="flex gap-2 flex-wrap">
       {#each app.sets as set, i (set.id)}
         <li
           animate:flip={{ duration: FLIP_DURATION }}
           style="--self: {set[500]}"
-          class="relative z-0 transition {currentDraggedSet === set.name && 'opacity-50 scale-95'}"
+          class="relative z-0 transition {isDragging && currentDraggedSet === set.id && 'opacity-50 scale-95'}"
           data-set
         >
           <button
+            ontouchstart={(e) => onCouldDragTouchStart(e, set.id, i)}
+            onmousedown={(e) => onCouldDragStart(e, set.id, i)}
             onclick={() => app.updateUISetId("selectedId", set.id)}
-            class="flex w-full items-center gap-5 p-3 rounded-lg hover:bg-background-100-900/50 transition {app.ids
-              .selectedId === set.id && '!bg-background-100-900'}"
+            class="grid items-center justify-center gap-5 p-2 rounded-lg transition hover:bg-background-100-900/50 {app
+              .ids.selectedId === set.id && '!bg-(--self)/25'}"
           >
-            <span class="bg-(--self) rounded-lg w-7 h-7"></span>
-            <span>{set.name}</span>
-          </button>
-          <button
-            use:passive={{ event: "touchstart", listener: (e) => onTouchDragStart(e, set.name, i) }}
-            onmousedown={(e) => onDragStart(e, set.name, i)}
-            class="right-4 top-1/2 -translate-y-1/2 absolute text-background-700-300/50 hover:bg-background-200-800/50 rounded p-1.5"
-          >
-            <HandleBarIcon />
+            <span class="col-start-1 row-start-1 bg-(--self) w-8 h-8 ring-2 ring-transparent rounded-lg"></span>
+            <FlyIcon
+              class="col-start-1 row-start-1 mx-auto transition {isDragging && currentDraggedSet === set.id
+                ? 'visible'
+                : 'invisible opacity-0'}"
+            />
+            <span class="sr-only">edit {set.name}</span>
           </button>
         </li>
       {/each}
+      <li>
+        <button
+          onclick={() => app.createEmptyColorSet()}
+          class="p-2 rounded-lg text-background-500 hover:bg-background-100-900/50 transition"
+        >
+          <div class="w-8 h-8 flex items-center justify-center">
+            <AddIcon class="w-6 h-7" />
+          </div>
+          <span class="sr-only">New Color Set</span>
+        </button>
+      </li>
     </ul>
-
-    <div class="mt-4">
-      <button
-        onclick={() => app.createEmptyColorSet()}
-        class="flex w-full items-center gap-5 p-3 rounded-lg text-background-500 hover:bg-background-100-900/50 transition"
-      >
-        <div class="w-7 h-7 flex items-center justify-center">
-          <AddIcon class="w-5 h-5" />
-        </div>
-        <span>New Color Set</span>
-      </button>
-    </div>
 
     <div
       class="fixed z-50 top-0 left-0 -translate-x-1/2 -translate-y-1/2"

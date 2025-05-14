@@ -11,22 +11,22 @@ export function isCursorInside(event: MouseEvent, rect: DOMRect): boolean {
 }
 
 /**
- * Because svelte doesn't support "passive" event listeners, we'll do this instead
+ * Because svelte doesn't support modifying the "passive" option in event listeners, we'll do this instead
  * https://svelte.dev/docs/svelte/v5-migration-guide#Event-changes-Event-modifiers
  */
-export function passive<T extends keyof WindowEventMap>(
+export function nonpassive<T extends keyof WindowEventMap>(
   node: HTMLElement,
   param: { event: T; listener: (e: WindowEventMap[T]) => void },
 ): ActionReturn<{ event: T; listener: (e: WindowEventMap[T]) => void }> {
   let listener = param.listener as any;
-  node.addEventListener(param.event, listener);
+  node.addEventListener(param.event, listener, { passive: false });
 
   return {
     update: ({ listener: _listener }) => {
       node.removeEventListener(param.event, listener);
       listener = _listener;
 
-      node.addEventListener(param.event, listener);
+      node.addEventListener(param.event, listener, { passive: false });
     },
     destroy: () => node.removeEventListener(param.event, param.listener as any),
   };

@@ -14,11 +14,6 @@
 
     <div>
       <ColorSetEditorName set={selectedSet} />
-      <ColorSetEditorName set={selectedSet} />
-      <ColorSetEditorName set={selectedSet} />
-      <ColorSetEditorName set={selectedSet} />
-      <ColorSetEditorName set={selectedSet} />
-      <ColorSetEditorName set={selectedSet} />
     </div>
   </div>
 {/if}
