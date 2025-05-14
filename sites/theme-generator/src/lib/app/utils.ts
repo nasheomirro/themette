@@ -1,0 +1,95 @@
+import { colorShades } from "./constants";
+import chroma, { type Color, type Scale } from "chroma-js";
+import type { ColorShade, ShadeSet } from "./types";
+
+/**
+ * returns a `ShadeSet` using the generated colors from the given scale.
+ * @param scale the scale used to generate colors
+ */
+export function createShadeSetFromScale(scale: Scale) {
+  const colors = scale.colors(colorShades.length);
+  const obj: Partial<ShadeSet> = {};
+  for (let i = 0; i < colorShades.length; i++) {
+    obj[colorShades[i]] = colors[i];
+  }
+
+  return obj as ShadeSet;
+}
+
+/**
+ * returns a `ShadeSet` that contains the contrasts for the given `set` using the given `light` and `dark` values.
+ * @param set the `ShadeSet` to map from
+ * @param light the light color to be used as contrast. *It cannot be a CSS variable*
+ * @param dark the dark color to be used as contrast. *It cannot be a CSS variable*
+ */
+export function createContrastsForShadeSet(set: ShadeSet, light: string, dark: string) {
+  const obj: Partial<ShadeSet> = {};
+  for (let key of Object.keys(set) as ColorShade[]) {
+    const v = chroma(set[key]);
+    const l = chroma(light);
+    const d = chroma(dark);
+
+    const best = chroma.contrast(v, l) > chroma.contrast(v, d) ? light : dark;
+    obj[key] = best;
+  }
+
+  return obj as ShadeSet;
+}
+
+/**
+ * returns a complete array of color shades generated from the given values of `from`.
+ * @param from an array of color values for interpolation
+ */
+export function genScale(from: [string, string] | [string, string, string]) {
+  const colors = chroma.scale(from).mode("oklch");
+  return from.length > 2 ? colors.correctLightness() : colors;
+}
+
+/**
+ * returns a complete array of color shades generated from the given seed.
+ * Note that the given color is used as the middle shade "500"
+ * @param seed the `Color` to generate shades from.
+ */
+export function genScaleFromColor(seed: Color) {
+  const lightness = seed.get("hsl.l");
+  const lto = lightness < 5 ? 2 : 2.5;
+  const dto = lightness > 5 ? 2 : 3;
+
+  const l = seed.brighten(lto).hex();
+  const m = seed.hex();
+  const d = seed.darken(dto).hex();
+
+  return genScale([l, m, d]).correctLightness();
+}
+
+/**
+ * creates a random `Color`.
+ * @param lightness the range to randomize the color's lightness, default is `[0.45, 0.6]`
+ * @param saturation the range to randomize the color's saturation
+ */
+export function genRandomColor(lightness: [number, number] = [0.45, 0.6], saturation?: [number, number]) {
+  const l = Math.random() * (lightness[1] - lightness[0]) + lightness[0]; // Random between the given range
+  let chromaColor = chroma.random().set("hsl.l", l);
+
+  if (saturation) {
+    const s = Math.random() * (saturation[1] - saturation[0]) + saturation[0]; // Random between the given range
+    chromaColor = chromaColor.set("hsl.s", s);
+  }
+
+  return chromaColor;
+}
+
+// https://stackoverflow.com/a/49670389
+/** recursively casts `Readonly` on an object. */
+export type DeepReadonly<T> = T extends (infer R)[]
+  ? DeepReadonlyArray<R>
+  : T extends Function
+    ? T
+    : T extends object
+      ? DeepReadonlyObject<T>
+      : T;
+
+interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
+type DeepReadonlyObject<T> = {
+  readonly [P in keyof T]: DeepReadonly<T[P]>;
+};

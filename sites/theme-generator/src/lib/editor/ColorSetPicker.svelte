@@ -1,12 +1,13 @@
 <!-- A somewhat rudimentary and yet slightly hacky dnd'abble list -->
 <script lang="ts">
   import { Spring } from "svelte/motion";
-  import { scale, fade } from "svelte/transition";
+  import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
 
   import { app } from "$lib/app/app.svelte";
   import { isCursorInside, passive } from "./utils";
 
+  import AddIcon from "~icons/lucide/plus";
   import FlyIcon from "~icons/lucide-lab/butterfly";
   import HandleBarIcon from "~icons/lucide/align-justify";
 
@@ -63,12 +64,8 @@
   }
 
   function moveCursorPosition(coords: { clientX: number; clientY: number }, instant?: boolean) {
-    // Get the container's bounding rectangle
-    const containerRect = container.getBoundingClientRect();
-
-    // Calculate the mouse position relative to the container
-    const relativeX = coords.clientX - containerRect.left;
-    const relativeY = coords.clientY - containerRect.top;
+    const relativeX = coords.clientX;
+    const relativeY = coords.clientY;
     cursorPosition.set({ x: relativeX, y: relativeY }, { instant });
   }
 
@@ -130,13 +127,13 @@
   }
 </script>
 
-<div class="space-y-6">
+<div class="space-y-7">
   <div class="space-y-2">
     <div class="text-2xl font-bold">Color Sets</div>
     <p class="text-sm text-background-700-300 font-light">All the colors of your theme is placed here.</p>
   </div>
   <div class="relative" bind:this={container}>
-    <ul class="space-y-2 py-1">
+    <ul class="space-y-2">
       {#each app.sets as set, i (set.id)}
         <li
           animate:flip={{ duration: FLIP_DURATION }}
@@ -163,8 +160,20 @@
       {/each}
     </ul>
 
+    <div class="mt-4">
+      <button
+        onclick={() => app.createEmptyColorSet()}
+        class="flex w-full items-center gap-5 p-3 rounded-lg text-background-500 hover:bg-background-100-900/50 transition"
+      >
+        <div class="w-7 h-7 flex items-center justify-center">
+          <AddIcon class="w-5 h-5" />
+        </div>
+        <span>New Color Set</span>
+      </button>
+    </div>
+
     <div
-      class="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2"
+      class="fixed z-50 top-0 left-0 -translate-x-1/2 -translate-y-1/2"
       style="top: {cursorPosition.current.y}px; left: {cursorPosition.current.x}px"
     >
       {#if isDragging}

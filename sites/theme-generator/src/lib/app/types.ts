@@ -1,10 +1,10 @@
 /** Fixed shades for all colors, currently it is not possible to define your own shades */
 export type ColorShade = "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900" | "950";
 
-export type ColorShadeObject = { [K in ColorShade]: string };
+export type ShadeSet = { [K in ColorShade]: string };
 
 /** An object representing an idividual color set in a themette theme */
-export type ColorSet = { id: string; name: string; contrasts: ColorShadeObject } & ColorShadeObject;
+export type ColorSet = { id: string; name: string; contrasts: ShadeSet } & ShadeSet;
 
 /** The main data object of the application */
 export type ThemetteTheme = ColorSet[];

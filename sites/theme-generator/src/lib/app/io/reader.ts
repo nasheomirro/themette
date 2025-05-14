@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { colorShades } from "../constants";
-import type { ColorSet, ColorShadeObject, ColorShade, ThemetteTheme } from "../types";
+import type { ColorSet, ShadeSet, ColorShade, ThemetteTheme } from "../types";
 
 /**
  * Converts a css string to a `ThemetteTheme` if possible, throws an error if it fails.
@@ -37,7 +37,7 @@ export function readTheme(css: string): ThemetteTheme {
   const theme = sets.map((set) => {
     // create an object for the set
     const colorSet: ColorSet = {} as ColorSet;
-    colorSet.contrasts = {} as ColorShadeObject;
+    colorSet.contrasts = {} as ShadeSet;
     colorSet.name = set;
     colorSet.id = nanoid();
 
@@ -68,13 +68,13 @@ export function readTheme(css: string): ThemetteTheme {
  */
 function isColorSet(set: any): set is ColorSet {
   if (typeof set.name !== "string" || typeof set.contrasts !== "object") return false;
-  return isColorShadeObject(set.contrasts) && isColorShadeObject(set);
+  return isShadeSet(set.contrasts) && isShadeSet(set);
 }
 
 /**
- * Only checks if the given set fits the `ColorShadeObject` type, it does not check
+ * Only checks if the given set fits the `ShadeSet` type, it does not check
  * if the values within is actually valid CSS.
  */
-function isColorShadeObject(set: any): set is ColorShadeObject {
+function isShadeSet(set: any): set is ShadeSet {
   return colorShades.every((shade) => typeof set[shade] === "string");
 }

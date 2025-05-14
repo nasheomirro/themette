@@ -1,7 +1,14 @@
 import themettecss from "$styles/themes/themette.css?raw";
+import { nanoid } from "nanoid";
 import { readTheme } from "./io/reader";
 import type { ColorSet, ThemetteTheme, UISetIds } from "./types";
-import type { DeepReadonly } from "./types.utils";
+import {
+  createContrastsForShadeSet,
+  createShadeSetFromScale,
+  genRandomColor,
+  genScaleFromColor,
+  type DeepReadonly,
+} from "./utils";
 
 // Note that the default is assumed to be themette.css and is hard coded in
 const defaultTheme = readTheme(themettecss);
@@ -54,6 +61,31 @@ class AppState {
       const set = this.#sets[index];
       this.#sets[index] = { ...set, ...updates };
     }
+  }
+
+  createEmptyColorSet() {
+    const seed = genRandomColor();
+    const shades = createShadeSetFromScale(genScaleFromColor(seed));
+    const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
+
+    const count = this.#sets.reduce((greatest: null | number, set) => {
+      if (set.name.startsWith("untitled")) {
+        let suffix = set.name.match(/untitled-(\d+)/)?.[1];
+        let increment = !suffix ? 1 : parseInt(suffix) + 1;
+        return greatest === null ? increment : greatest < increment ? increment : greatest;
+      }
+
+      return greatest;
+    }, null);
+
+    const colorSet: ColorSet = {
+      name: "untitled" + (count ? `-${count}` : ""),
+      id: nanoid(),
+      ...shades,
+      contrasts,
+    };
+
+    this.#sets.push(colorSet);
   }
 
   deleteColorSet(id: string) {

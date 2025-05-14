@@ -1,7 +1,7 @@
 import boilerplate from "./boilerplate.txt?raw";
 
 import { colorPairings, colorShades } from "../constants";
-import type { DeepReadonly } from "../types.utils";
+import type { DeepReadonly } from "../utils";
 import type { ThemetteTheme } from "../types";
 
 /** the object returned from `writeTheme` */

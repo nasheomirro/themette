@@ -21,16 +21,18 @@
 <Navbar />
 
 <div
-  class="centered-container grid items-start md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_2fr] xl:grid-cols-[1fr_3fr] pt-14 overflow-x-clip"
+  class="centered-container grid items-start md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_2fr] xl:grid-cols-[1fr_3fr] pt-14"
 >
   <div
     class="
       {panel.mobile === 'editor' ? 'max-md:block' : 'max-md:hidden'}
       max-md:col-start-1 max-md:row-start-1
-      py-10 md:px-4 md:min-h-[calc(100vh-3.5rem)] md:sticky top-14 md:z-30
+      pt-10 md:px-4 md:h-[calc(100vh-3.5rem)] md:sticky md:top-14 md:z-30 md:overflow-y-scroll
     "
   >
-    {@render editor()}
+    <div>
+      {@render editor()}
+    </div>
   </div>
   <div
     class="

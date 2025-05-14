@@ -15,6 +15,7 @@ export const colorShades = [
   "950",
 ] as const satisfies ColorShade[];
 
+/** an array that holds all valid color pairings */
 export const colorPairings = [
   ["50", "950"],
   ["100", "900"],
