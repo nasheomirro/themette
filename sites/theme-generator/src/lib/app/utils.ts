@@ -17,6 +17,20 @@ export function createShadeSetFromScale(scale: Scale) {
 }
 
 /**
+ * returns the color that has the best contrast for the given color
+ * @param color the color to contrast
+ * @param a color A
+ * @param b color B
+ */
+export function compareContrastsForColor(color: string | Color, a: string | Color, b: string | Color) {
+  const v = chroma(color);
+  const l = chroma(a);
+  const d = chroma(b);
+
+  return chroma.contrast(v, l) > chroma.contrast(v, d) ? a : b;
+}
+
+/**
  * returns a `ShadeSet` that contains the contrasts for the given `set` using the given `light` and `dark` values.
  * @param set the `ShadeSet` to map from
  * @param light the light color to be used as contrast. *It cannot be a CSS variable*
@@ -25,11 +39,7 @@ export function createShadeSetFromScale(scale: Scale) {
 export function createContrastsForShadeSet(set: ShadeSet, light: string, dark: string) {
   const obj: Partial<ShadeSet> = {};
   for (let key of Object.keys(set) as ColorShade[]) {
-    const v = chroma(set[key]);
-    const l = chroma(light);
-    const d = chroma(dark);
-
-    const best = chroma.contrast(v, l) > chroma.contrast(v, d) ? light : dark;
+    const best = compareContrastsForColor(set[key], light, dark) === light ? light : dark;
     obj[key] = best;
   }
 

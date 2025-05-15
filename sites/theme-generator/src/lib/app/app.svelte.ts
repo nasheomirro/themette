@@ -86,6 +86,7 @@ class AppState {
     };
 
     this.#sets.push(colorSet);
+    return colorSet;
   }
 
   deleteColorSet(id: string) {

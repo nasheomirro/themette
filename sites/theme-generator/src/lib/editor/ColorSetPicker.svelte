@@ -5,10 +5,11 @@
   import { flip } from "svelte/animate";
 
   import { app } from "$lib/app/app.svelte";
-  import { isCursorInside, nonpassive } from "./utils";
+  import { isCursorInside } from "./utils";
 
   import AddIcon from "~icons/lucide/plus";
   import FlyIcon from "~icons/lucide-lab/butterfly";
+  import PenIcon from "~icons/material-symbols/pen-size-5";
 
   const cursorPosition = new Spring({ x: 0, y: 0 }, { stiffness: 0.2, damping: 0.4 });
 
@@ -177,11 +178,11 @@
     <p class="text-sm text-background-700-300 font-light">All the colors of your theme is placed here.</p>
   </div>
   <div class="relative" bind:this={container}>
-    <ul class="flex gap-2 flex-wrap">
+    <ul class="flex items-start gap-2 flex-wrap">
       {#each app.sets as set, i (set.id)}
         <li
           animate:flip={{ duration: FLIP_DURATION }}
-          style="--self: {set[500]}"
+          style="--self: {set[500]}; --contrast: {set.contrasts[500]}"
           class="relative z-0 transition {isDragging && currentDraggedSet === set.id && 'opacity-50 scale-95'}"
           data-set
         >
@@ -189,27 +190,23 @@
             ontouchstart={(e) => onCouldDragTouchStart(e, set.id, i)}
             onmousedown={(e) => onCouldDragStart(e, set.id, i)}
             onclick={() => app.updateUISetId("selectedId", set.id)}
-            class="grid items-center justify-center gap-5 p-2 rounded-lg transition hover:bg-background-100-900/50 {app
-              .ids.selectedId === set.id && '!bg-(--self)/25'}"
+            class="group flex items-center justify-center gap-5 w-10 h-10 shadow rounded-md transition bg-(--self) text-(--contrast) hover:brightness-95 {app
+              .ids.selectedId === set.id && 'ring-2 ring-(--self)/50'}"
           >
-            <span class="col-start-1 row-start-1 bg-(--self) w-8 h-8 ring-2 ring-transparent rounded-lg"></span>
-            <FlyIcon
-              class="col-start-1 row-start-1 mx-auto transition {isDragging && currentDraggedSet === set.id
-                ? 'visible'
-                : 'invisible opacity-0'}"
-            />
+            <PenIcon class="transition {app.ids.selectedId === set.id ? 'opacity-100' : 'opacity-0'}" />
             <span class="sr-only">edit {set.name}</span>
           </button>
         </li>
       {/each}
       <li>
         <button
-          onclick={() => app.createEmptyColorSet()}
-          class="p-2 rounded-lg text-background-500 hover:bg-background-100-900/50 transition"
+          onclick={() => {
+            const { id } = app.createEmptyColorSet();
+            app.updateUISetId("selectedId", id);
+          }}
+          class="w-10 h-10 flex items-center justify-center rounded-lg text-background-500 transition hover:scale-110"
         >
-          <div class="w-8 h-8 flex items-center justify-center">
-            <AddIcon class="w-6 h-7" />
-          </div>
+          <AddIcon class="w-6 h-6" />
           <span class="sr-only">New Color Set</span>
         </button>
       </li>
