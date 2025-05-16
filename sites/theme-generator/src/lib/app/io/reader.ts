@@ -10,9 +10,10 @@ export function readTheme(css: string): ThemetteTheme {
   /**
    * matches set, shade, and value:
    * - `(?<!(?:-contrast))` ignores contrast variables
-   * - `(?<!(?:-\d+-\d+))` ignores generated pairing variables
+   * - `(?<!(?:50-950...))` ignores generated pairing variables
    */
-  const colorRegex = /^--color-(.+?)(?<!(?:-contrast))-(\d+)(?<!(?:-\d+-\d+)):\s*([^;]+);/;
+  const colorRegex =
+    /^--color-(.+?)(?<!(?:-contrast))-(\d+)(?<!(?:50-950|100-900|200-800|300-700|400-600|500-500|600-400|700-300|800-200|900-100|950-50)):\s*([^;]+);/;
   const contrastRegex = /^--color-(.+?)-contrast-(\d+):\s*([^;]+);/;
 
   const lines = css

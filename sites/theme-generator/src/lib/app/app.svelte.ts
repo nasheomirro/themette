@@ -7,6 +7,7 @@ import {
   createShadeSetFromScale,
   genRandomColor,
   genScaleFromColor,
+  getNextNameSuffix,
   type DeepReadonly,
 } from "./utils";
 
@@ -51,15 +52,32 @@ class AppState {
   }
 
   /**
-   * updates the specified object with the given partial updates
+   * updates the specified object with the given partial updates, you cannot update the id or the name through this method.
    * @param id the id of the set
-   * @param updates the new values for the set
+   * @param updates the new values for the set, **careful, this gets mutated**
    */
   updateColorSet(id: string, updates: Partial<Omit<ColorSet, "id">>) {
     const index = this.#sets.findIndex((set) => set.id === id);
-    if (index !== -1) {
-      const set = this.#sets[index];
-      this.#sets[index] = { ...set, ...updates };
+    const set: ColorSet | undefined = this.#sets[index];
+    if (set) {
+      if (Object.hasOwn(updates, "name")) {
+        let name = updates.name || set.name;
+        name = name
+          .trim()
+          .toLowerCase()
+          .replaceAll(/[^a-z0-9\s\-]/g, "")
+          .trim() // edge case for when an invalid character leaves space at the ends
+          .replaceAll(/\s+/g, "-");
+
+        updates.name = getNextNameSuffix(
+          this.#sets.filter((set) => set.id !== id).map((set) => set.name),
+          name,
+        );
+      }
+
+      const newColorSet = { ...set, ...updates };
+      this.#sets[index] = newColorSet;
+      return newColorSet;
     }
   }
 
@@ -67,19 +85,13 @@ class AppState {
     const seed = genRandomColor();
     const shades = createShadeSetFromScale(genScaleFromColor(seed));
     const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
-
-    const count = this.#sets.reduce((greatest: null | number, set) => {
-      if (set.name.startsWith("untitled")) {
-        let suffix = set.name.match(/untitled-(\d+)/)?.[1];
-        let increment = !suffix ? 1 : parseInt(suffix) + 1;
-        return greatest === null ? increment : greatest < increment ? increment : greatest;
-      }
-
-      return greatest;
-    }, null);
+    const name = getNextNameSuffix(
+      this.#sets.map((set) => set.name),
+      "untitled",
+    );
 
     const colorSet: ColorSet = {
-      name: "untitled" + (count ? `-${count}` : ""),
+      name,
       id: nanoid(),
       ...shades,
       contrasts,
