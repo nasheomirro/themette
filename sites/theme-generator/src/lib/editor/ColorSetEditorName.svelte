@@ -13,7 +13,7 @@
   <label class="mb-2 block">
     <span class="label-text">name</span>
     <input
-      class="border-none w-full ring-1 ring-$background-200-800 focus:ring-$foreground-500 rounded-lg bg-transparent"
+      class="border-none w-full ring-1 ring-th-background-200-800 focus:ring-th-foreground-500 rounded-lg bg-transparent"
       value={set.name}
       onchange={(e) => {
         const _set = app.updateColorSet(set.id, { name: e.currentTarget.value });
@@ -23,7 +23,7 @@
       }}
     />
   </label>
-  <p class="text-sm text-$background-700-300 font-light">
+  <p class="text-sm text-th-background-700-300 font-light">
     must be unique and can only contain letter characters, numbers, or "-"
   </p>
 </div>

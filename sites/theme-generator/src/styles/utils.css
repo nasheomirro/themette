@@ -7,6 +7,6 @@
 /* Forms */
 @utility label-text {
   @layer base {
-    @apply text-xs text-$background-700-300;
+    @apply text-xs text-th-background-700-300;
   }
 }
