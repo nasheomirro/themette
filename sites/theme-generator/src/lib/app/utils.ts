@@ -79,7 +79,7 @@ export function genScaleFromColor(seed: Color) {
  *  Note that the `name` has to not have a suffix already.
  */
 export function getNextNameSuffix(arr: string[], name: string) {
-  const regex = new RegExp("^" + name + "-?((?<=-)\\d+)?");
+  const regex = new RegExp("^" + name + "-?((?<=-)\\d+)?$");
 
   // we want to add "name" here in case name also has a suffix
   const n = arr.reduce((greatest: null | number, item) => {
