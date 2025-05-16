@@ -175,7 +175,7 @@
 <div class="space-y-7">
   <div class="space-y-2">
     <div class="text-2xl font-bold">Color Sets</div>
-    <p class="text-sm text-background-700-300 font-light">All the colors of your theme is placed here.</p>
+    <p class="text-sm text-$background-700-300 font-light">All the colors of your theme is placed here.</p>
   </div>
   <div class="relative" bind:this={container}>
     <ul class="flex items-start gap-2 flex-wrap">
@@ -204,7 +204,7 @@
             const { id } = app.createEmptyColorSet();
             app.updateUISetId("selectedId", id);
           }}
-          class="w-10 h-10 flex items-center justify-center rounded-lg text-background-500 transition hover:scale-110"
+          class="w-10 h-10 flex items-center justify-center rounded-lg text-$background-500 transition hover:scale-110"
         >
           <AddIcon class="w-6 h-6" />
           <span class="sr-only">New Color Set</span>
@@ -218,7 +218,7 @@
     >
       {#if isDragging}
         <div class="w-40 h-40 flex items-center justify-center">
-          <div class="p-1 rounded-full bg-foreground-500 text-background-50" transition:scale={{ duration: 100 }}>
+          <div class="p-1 rounded-full bg-$foreground-500 text-$background-50" transition:scale={{ duration: 100 }}>
             <FlyIcon />
           </div>
         </div>

@@ -13,8 +13,8 @@ export type ThemetteTheme = ColorSet[];
 export type UISetIds = {
   /** The currently selected set's id. */
   selectedId: string | null;
-  /** the id of the set that would be used for overriding the `--color-foreground-*` colors */
+  /** the id of the set that would be used for overriding the `--color-$foreground-*` colors */
   foregroundId: string | null;
-  /** the id of the set that would be used for overriding the `--color-background-*` colors */
+  /** the id of the set that would be used for overriding the `--color-$background-*` colors */
   backgroundId: string | null;
 };
