@@ -11,9 +11,9 @@
 
 <div>
   <label class="mb-2 block">
-    <span class="label-text">name</span>
+    <span class="label-text">Name</span>
     <input
-      class="border-none w-full ring-1 ring-th-background-200-800 focus:ring-th-foreground-500 rounded-lg bg-transparent"
+      class="input"
       value={set.name}
       onchange={(e) => {
         const _set = app.updateColorSet(set.id, { name: e.currentTarget.value });
@@ -23,7 +23,7 @@
       }}
     />
   </label>
-  <p class="text-sm text-th-background-700-300 font-light">
-    must be unique and can only contain letter characters, numbers, or "-"
+  <p class="text-xs font-light text-th-background-600-400">
+    This will be used as the name on the generated CSS variables.
   </p>
 </div>

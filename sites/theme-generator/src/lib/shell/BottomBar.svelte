@@ -27,7 +27,7 @@
 
 <RadioGroup.Root
   bind:value={panel.mobile}
-  class="fixed md:hidden bg-th-background-50-950 flex items-center left-0 bottom-0 z-40 w-full min-h-[4rem] border-t border-t-th-background-100-900"
+  class="fixed md:hidden bg-th-background-50-950 flex items-center left-0 bottom-0 z-40 w-full h-16 border-t border-t-th-background-100-900"
 >
   {#snippet child({ props })}
     <nav {...props}>

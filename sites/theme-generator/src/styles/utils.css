@@ -1,12 +1,30 @@
 @utility centered-container {
   @layer base {
-    @apply mx-auto px-4 max-w-[90rem];
+    @apply mx-auto max-w-[95rem];
+  }
+}
+
+@utility container-x-padding {
+  @layer base {
+    @apply px-4;
+  }
+}
+
+@utility btn {
+  @layer base {
+    @apply transition block p-2 rounded-lg hover:bg-th-background-100-900;
   }
 }
 
 /* Forms */
 @utility label-text {
   @layer base {
-    @apply text-xs text-th-background-700-300;
+    @apply block text-sm mb-2 text-th-background-600-400 font-normal;
+  }
+}
+
+@utility input {
+  @layer base {
+    @apply border-none text-sm outline-0 px-2.5 py-2 w-full ring-1 ring-th-background-100-900 focus:ring-th-foreground-500 rounded-md bg-transparent;
   }
 }

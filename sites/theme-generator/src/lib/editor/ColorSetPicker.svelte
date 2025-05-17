@@ -15,7 +15,7 @@
 
   // variables related to dragging
   let isDragging = $state(false);
-  let currentDraggedSet = $state<string | undefined>();
+  let currentDraggedSetId = $state<string | undefined>();
   let currentPosition: number;
   let container: HTMLElement;
   let itemRects: DOMRect[] = [];
@@ -35,7 +35,7 @@
   function onCouldDragStart(event: MouseEvent, set: string, index: number) {
     couldDragStartX = event.clientX;
     couldDragStartY = event.clientY;
-    currentDraggedSet = set;
+    currentDraggedSetId = set;
     currentPosition = index;
 
     document.addEventListener("mousemove", onCouldDragging);
@@ -112,7 +112,7 @@
     isDragging = false;
     debounceMoveTimeout = undefined;
     flippingTimeout = undefined;
-    currentDraggedSet = undefined;
+    currentDraggedSetId = undefined;
     movingTo = undefined;
 
     document.removeEventListener("mousemove", onDragging);
@@ -183,7 +183,7 @@
         <li
           animate:flip={{ duration: FLIP_DURATION }}
           style="--self: {set[500]}; --contrast: {set.contrasts[500]}"
-          class="relative z-0 transition {isDragging && currentDraggedSet === set.id && 'opacity-50 scale-95'}"
+          class="relative z-0 transition {isDragging && currentDraggedSetId === set.id && 'opacity-50 scale-95'}"
           data-set
         >
           <button
@@ -218,7 +218,11 @@
     >
       {#if isDragging}
         <div class="w-40 h-40 flex items-center justify-center">
-          <div class="p-1 rounded-full bg-th-foreground-500 text-th-background-50" transition:scale={{ duration: 100 }}>
+          <div
+            style="--c: var(--color-{app.sets.find((set) => set.id === currentDraggedSetId)?.name}-500)"
+            class="p-1 rounded-full bg-(--c) text-th-background-50"
+            transition:scale={{ duration: 100 }}
+          >
             <FlyIcon />
           </div>
         </div>

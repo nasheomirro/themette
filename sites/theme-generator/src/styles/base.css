@@ -30,6 +30,22 @@
     font-weight: 600;
   }
 
+  /* Works on Chrome, Edge, and Safari */
+  ::-webkit-scrollbar {
+    width: 6px; /* thin scrollbar */
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent; /* or use a very light gray for visibility */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-th-background-200-800;
+    border-radius: 10px;
+    border: none;
+  }
+
   :root {
     @apply scheme-light dark:scheme-dark;
   }

@@ -1,6 +1,5 @@
 /* Note do not change the order unless it makes sense */
 @import "tailwindcss";
-@plugin '@tailwindcss/forms';
 
 @import "$styles/base.css";
 @import "$styles/themes/themette.css";

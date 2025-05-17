@@ -27,7 +27,7 @@
     class="
       {panel.mobile === 'editor' ? 'max-md:block' : 'max-md:hidden'}
       max-md:col-start-1 max-md:row-start-1
-      pt-10 md:px-4 md:h-[calc(100vh-3.5rem)] md:sticky md:top-14 md:z-30 md:overflow-y-scroll
+      pt-10 pb-26 px-4 md:px-6 lg:px-8 md:h-[calc(100vh-3.5rem)] md:sticky md:top-14 md:z-30 md:overflow-auto
     "
   >
     <div>
