@@ -1,9 +1,16 @@
 <script lang="ts">
   import chroma from "chroma-js";
 
-  import type { ColorSet, ColorShade } from "$lib/app/types";
   import { app } from "$lib/app/app.svelte";
   import { colorShades } from "$lib/app/constants";
+  import type { ColorSet, ColorShade } from "$lib/app/types";
+  import {
+    createContrastsForShadeSet,
+    createShadeSetFromScale,
+    genRandomColor,
+    genScaleFromColor,
+  } from "$lib/app/utils";
+
   import Select from "$lib/components/Select.svelte";
 
   import RandomIcon from "~icons/lucide/dices";
@@ -15,7 +22,7 @@
 
   const { set }: Props = $props();
 
-  let editMode: "manual" | "linear" | "multicolor" | "seed" = $state("multicolor");
+  let editMode: "manual" | "linear" | "multicolor" | "seed" = $state("seed");
 
   const options = [
     { value: "manual", label: "Manual" },
@@ -37,13 +44,20 @@
 
     return colorShades;
   });
+
+  const handleRandomGeneration = () => {
+    const seed = genRandomColor();
+    const shades = createShadeSetFromScale(genScaleFromColor(seed));
+    const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
+    app.updateColorSet(set.id, { ...shades, contrasts });
+  };
 </script>
 
 <div>
   <div class="mb-8">
     <div class="flex gap-2 items-center justify-between mb-4">
       <div class="flex gap-1">
-        <button class="btn">
+        <button class="btn" onclick={handleRandomGeneration}>
           <RandomIcon />
         </button>
         <button class="btn">
@@ -55,7 +69,7 @@
       </div>
     </div>
     <div>
-      <h3 class="text-sm mb-2">{options.find((item) => item.value === editMode)?.label}</h3>
+      <h3 class="text-sm mb-2">{options.find((item) => item.value === editMode)?.label} Mode</h3>
       <p class="text-xs text-th-background-700-300 font-light">
         {#if editMode === "manual"}
           You can edit each shade manually, switch to other editing modes if you want to automatically interpolate
