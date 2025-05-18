@@ -11,11 +11,13 @@
 {#if selectedSet}
   <div>
     <div class="relative mb-8">
-      <h3 class="text-xl mb-2 font-bold">Edit Color Set</h3>
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-xl font-bold">Edit Color Set</h3>
+        <button class="btn">
+          <TrashIcon />
+        </button>
+      </div>
       <p class="text-sm font-light text-th-background-700-300">Edit the current chosen color set here.</p>
-      <button class="btn absolute top-0 right-0">
-        <TrashIcon />
-      </button>
     </div>
     <div class="space-y-8">
       <ColorSetEditorName set={selectedSet} />

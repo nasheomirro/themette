@@ -10,7 +10,7 @@
 </script>
 
 <div>
-  <label class="mb-2 block">
+  <label class="mb-3 block">
     <span class="label-text">Name</span>
     <input
       class="input"
