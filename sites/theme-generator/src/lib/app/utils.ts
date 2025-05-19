@@ -17,17 +17,17 @@ export function createShadeSetFromScale(scale: Scale) {
 }
 
 /**
- * returns the color that has the best contrast for the given color
+ * returns the color that has the best contrast for the given color as `"light" | "dark"`
  * @param color the color to contrast
- * @param a color A
- * @param b color B
+ * @param light the light contrast color
+ * @param dark the dark contrast color
  */
 export function compareContrastsForColor(color: string | Color, a: string | Color, b: string | Color) {
   const v = chroma(color);
   const l = chroma(a);
   const d = chroma(b);
 
-  return chroma.contrast(v, l) > chroma.contrast(v, d) ? a : b;
+  return chroma.contrast(v, l) > chroma.contrast(v, d) ? "light" : "dark";
 }
 
 /**
@@ -43,7 +43,7 @@ export function createContrastSet(set: ShadeSet, light: string | Color, dark: st
   obj.dark = chroma(dark).css("oklab");
 
   for (let key of Object.keys(set) as ColorShade[]) {
-    const best = compareContrastsForColor(set[key], light, dark) === light ? "light" : "dark";
+    const best = compareContrastsForColor(set[key], light, dark);
     obj[key] = best;
   }
 

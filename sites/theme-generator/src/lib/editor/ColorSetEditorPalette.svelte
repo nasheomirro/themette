@@ -5,6 +5,7 @@
   import { colorShades } from "$lib/app/constants";
   import type { ColorSet, ColorShade } from "$lib/app/types";
   import {
+    compareContrastsForColor,
     createContrastSet,
     createShadeSetFromScale,
     genRandomColor,
@@ -65,11 +66,26 @@
     app.updateColorSet(set.id, { ...shades, contrasts });
   };
 
-  $inspect(app.sets);
+  const refreshGeneratedValues = () => {
+    if (editMode === "linear") handleLinearGeneration();
+    if (editMode === "multicolor") handleMultiColorGeneration();
+    if (editMode === "seed") handleSeedGeneration(set[500]);
+  };
 
   const handleColorChange = (value: string, shade: ColorShade) => {
     if (chroma.valid(value)) {
+      app.updateColorSet(set.id, {
+        [shade]: value,
+        contrasts: { [shade]: compareContrastsForColor(value, set.contrasts.light, set.contrasts.dark) },
+      });
+
+      // note that we aren't checking whether the appropriate shades have been updated.
+      // Here we blindly trust that the UI is showing the appropriate shade inputs depending on the edit mode
+      refreshGeneratedValues();
+      return true;
     }
+
+    return false;
   };
 </script>
 
@@ -80,7 +96,7 @@
         <button class="btn" onclick={() => handleSeedGeneration(genRandomColor())}>
           <RandomIcon />
         </button>
-        <button class="btn">
+        <button class="btn" onclick={() => refreshGeneratedValues()}>
           <RefreshIcon />
         </button>
       </div>
@@ -108,7 +124,7 @@
     </div>
   </div>
 
-  <div>
+  <div class="mb-8">
     <div class="space-y-5">
       {#each shades as shade}
         <div class="flex gap-4 items-center">
@@ -120,19 +136,31 @@
             <input
               type="color"
               class="w-7 h-7 rounded shadow"
-              bind:value={() => chroma(set[shade]).hex(), (v) => app.updateColorSet(set.id, { [shade]: v })}
+              value={chroma(set[shade]).hex()}
+              oninput={({ currentTarget }) => handleColorChange(currentTarget.value, shade)}
             />
           </label>
           <label class="grow">
             <span class="sr-only">color shade ({shade})</span>
             <input
               class="input"
-              bind:value={() => chroma(set[shade]).hex(), (v) => app.updateColorSet(set.id, { [shade]: v })}
+              value={chroma(set[shade]).hex()}
+              onchange={({ currentTarget }) => {
+                const isSuccess = handleColorChange(currentTarget.value, shade);
+                // value might not get updated because it's invalid, force the input to change back to the original value
+                if (!isSuccess) currentTarget.value = set[shade];
+              }}
             />
           </label>
         </div>
       {/each}
     </div>
+  </div>
+
+  <div class="grid grid-cols-11 min-h-8 rounded-lg overflow-hidden">
+    {#each colorShades as shade}
+      <div style="--bg: var(--color-{set.name}-{shade})" class="bg-(--bg)"></div>
+    {/each}
   </div>
 </div>
 

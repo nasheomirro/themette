@@ -1,7 +1,7 @@
 import themettecss from "$styles/themes/themette.css?raw";
 import { nanoid } from "nanoid";
 import { readTheme } from "./io/reader";
-import type { ColorSet, ThemetteTheme, UISetIds } from "./types";
+import type { ColorSet, ContrastSet, ThemetteTheme, UISetIds } from "./types";
 import {
   createContrastSet,
   createShadeSetFromScale,
@@ -56,10 +56,14 @@ class AppState {
    * @param id the id of the set
    * @param updates the new values for the set, **careful, this gets mutated**
    */
-  updateColorSet(id: string, updates: Partial<Omit<ColorSet, "id">>) {
+  updateColorSet(
+    id: string,
+    updates: Partial<Omit<ColorSet, "id" | "contrasts"> & { contrasts: Partial<ContrastSet> }>,
+  ) {
     const index = this.#sets.findIndex((set) => set.id === id);
     const set: ColorSet | undefined = this.#sets[index];
     if (set) {
+      // handle updating the set's name
       if (Object.hasOwn(updates, "name")) {
         let name = updates.name || set.name;
         name = name
@@ -75,9 +79,10 @@ class AppState {
         );
       }
 
-      const newColorSet = { ...set, ...updates };
-      this.#sets[index] = newColorSet;
-      return newColorSet;
+      const { contrasts, ..._updates } = updates;
+
+      this.#sets[index] = { ...set, ..._updates };
+      this.#sets[index].contrasts = { ...set.contrasts, ...contrasts };
     }
   }
 

@@ -1,6 +1,6 @@
 @utility centered-container {
   @layer base {
-    @apply mx-auto max-w-[95rem];
+    @apply mx-auto max-w-[105rem];
   }
 }
 
