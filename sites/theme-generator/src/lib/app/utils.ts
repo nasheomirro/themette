@@ -1,6 +1,6 @@
 import { colorShades } from "./constants";
 import chroma, { type Color, type Scale } from "chroma-js";
-import type { ColorShade, ShadeSet } from "./types";
+import type { ColorShade, ContrastSet, ShadeSet } from "./types";
 
 /**
  * returns a `ShadeSet` using the generated colors from the given scale.
@@ -31,19 +31,23 @@ export function compareContrastsForColor(color: string | Color, a: string | Colo
 }
 
 /**
- * returns a `ShadeSet` that contains the contrasts for the given `set` using the given `light` and `dark` values.
+ * returns a `ContrastSet` that contains the contrasts for the given `set` using the given `light` and `dark` values.
  * @param set the `ShadeSet` to map from
- * @param light the light color to be used as contrast. *It cannot be a CSS variable*
- * @param dark the dark color to be used as contrast. *It cannot be a CSS variable*
+ * @param light the light contrast color
+ * @param dark the dark contrast color
  */
-export function createContrastsForShadeSet(set: ShadeSet, light: string, dark: string) {
-  const obj: Partial<ShadeSet> = {};
+export function createContrastSet(set: ShadeSet, light: string | Color, dark: string | Color) {
+  const obj: Partial<ContrastSet> = {};
+
+  obj.light = chroma(light).css("oklab");
+  obj.dark = chroma(dark).css("oklab");
+
   for (let key of Object.keys(set) as ColorShade[]) {
-    const best = compareContrastsForColor(set[key], light, dark) === light ? light : dark;
+    const best = compareContrastsForColor(set[key], light, dark) === light ? "light" : "dark";
     obj[key] = best;
   }
 
-  return obj as ShadeSet;
+  return obj as ContrastSet;
 }
 
 /**

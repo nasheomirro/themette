@@ -20,10 +20,10 @@ export function readTheme(css: string): ThemetteTheme {
    */
   const contrastLightDarkRegex = /^--color-(.+?)-contrast-(light|dark):\s*([^;]+);/;
   /**
-   * matches color-shade contrasts, capturing `set`, `shade`, and `value`.
+   * matches color-shade contrasts, capturing `set`, `shade`, and `mode`.
    * - `(var\(--color-\1-contrast-(?:light|dark)\))` is to make sure the value uses light-dark contrast variables.
    */
-  const contrastRegex = /^--color-(.+?)-contrast-(\d+):\s*(var\(--color-\1-contrast-(?:light|dark)\));/;
+  const contrastRegex = /^--color-(.+?)-contrast-(\d+):\s*var\(--color-\1-contrast-(light|dark)\);/;
 
   const lines = css
     .split("\n")
@@ -46,7 +46,7 @@ export function readTheme(css: string): ThemetteTheme {
     .map((line) => line.match(contrastRegex))
     .filter((matches) => matches !== null)
     .filter((matches) => matches.length === 4 && colorShades.includes(matches[2] as any))
-    .map(([, set, shade, value]) => ({ set, shade, value }));
+    .map(([, set, shade, mode]) => ({ set, shade, mode }));
 
   const sets = [...new Set([...colors.map(({ set }) => set), ...contrasts.map(({ set }) => set)])];
 
@@ -75,7 +75,7 @@ export function readTheme(css: string): ThemetteTheme {
     contrasts
       .filter((contrast) => contrast.set === set)
       .forEach((contrast) => {
-        colorSet.contrasts[contrast.shade as ColorShade] = contrast.value;
+        colorSet.contrasts[contrast.shade as ColorShade] = contrast.mode as "light" | "dark";
       });
 
     return colorSet;

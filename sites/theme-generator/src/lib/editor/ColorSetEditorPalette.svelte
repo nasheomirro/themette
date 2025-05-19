@@ -5,7 +5,7 @@
   import { colorShades } from "$lib/app/constants";
   import type { ColorSet, ColorShade } from "$lib/app/types";
   import {
-    createContrastsForShadeSet,
+    createContrastSet,
     createShadeSetFromScale,
     genRandomColor,
     genScale,
@@ -46,21 +46,21 @@
 
   const handleSeedGeneration = (seed: string | Color) => {
     const shades = createShadeSetFromScale(genScaleFromColor(seed));
-    const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
+    const contrasts = createContrastSet(shades, shades[50], shades[950]);
 
     app.updateColorSet(set.id, { ...shades, contrasts });
   };
 
   const handleLinearGeneration = () => {
     const shades = createShadeSetFromScale(genScale([set[50], set[950]]));
-    const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
+    const contrasts = createContrastSet(shades, shades[50], shades[950]);
 
     app.updateColorSet(set.id, { ...shades, contrasts });
   };
 
   const handleMultiColorGeneration = () => {
     const shades = createShadeSetFromScale(genScale([set[50], set[500], set[950]]));
-    const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
+    const contrasts = createContrastSet(shades, shades[50], shades[950]);
 
     app.updateColorSet(set.id, { ...shades, contrasts });
   };
@@ -70,7 +70,7 @@
   const handleColorChange = (value: string, shade: ColorShade) => {
     if (chroma.valid(value)) {
     }
-  }
+  };
 </script>
 
 <div>

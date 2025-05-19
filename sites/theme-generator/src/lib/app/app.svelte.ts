@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import { readTheme } from "./io/reader";
 import type { ColorSet, ThemetteTheme, UISetIds } from "./types";
 import {
-  createContrastsForShadeSet,
+  createContrastSet,
   createShadeSetFromScale,
   genRandomColor,
   genScaleFromColor,
@@ -82,13 +82,13 @@ class AppState {
   }
 
   createEmptyColorSet() {
-    const seed = genRandomColor();
-    const shades = createShadeSetFromScale(genScaleFromColor(seed));
-    const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
     const name = getNextNameSuffix(
       this.#sets.map((set) => set.name),
       "untitled",
     );
+    const seed = genRandomColor();
+    const shades = createShadeSetFromScale(genScaleFromColor(seed));
+    const contrasts = createContrastSet(shades, shades[50], shades[950]);
 
     const colorSet: ColorSet = {
       name,

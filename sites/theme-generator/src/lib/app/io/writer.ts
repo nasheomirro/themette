@@ -36,7 +36,7 @@ export function writeTheme(theme: DeepReadonly<ThemetteTheme>): WriteThemeReturn
       const cv = set.contrasts[shade];
 
       colors += color(key, shade, v);
-      contrasts += contrast(key, shade, cv);
+      contrasts += contrast(key, shade, `var(--color-${set.name}-contrast-${cv})`);
     }
 
     // add normal and contrast pairs.
