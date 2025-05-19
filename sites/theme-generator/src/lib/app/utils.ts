@@ -60,7 +60,8 @@ export function genScale(from: [string, string] | [string, string, string]) {
  * Note that the given color is used as the middle shade "500"
  * @param seed the `Color` to generate shades from.
  */
-export function genScaleFromColor(seed: Color) {
+export function genScaleFromColor(seed: Color | string) {
+  seed = chroma(seed);
   const lightness = seed.get("hsl.l");
   const lto = lightness < 5 ? 2 : 2.5;
   const dto = lightness > 5 ? 2 : 3;

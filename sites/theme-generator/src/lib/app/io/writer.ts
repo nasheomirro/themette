@@ -26,6 +26,11 @@ export function writeTheme(theme: DeepReadonly<ThemetteTheme>): WriteThemeReturn
   for (let set of theme) {
     const key = set.name;
 
+    // add the light and dark values from contrasts
+    contrasts += contrast(key, "light", set.contrasts.light);
+    contrasts += contrast(key, "dark", set.contrasts.dark);
+
+    // write shades for both color and contrasts
     for (let shade of colorShades) {
       const v = set[shade];
       const cv = set.contrasts[shade];
@@ -34,6 +39,7 @@ export function writeTheme(theme: DeepReadonly<ThemetteTheme>): WriteThemeReturn
       contrasts += contrast(key, shade, cv);
     }
 
+    // add normal and contrast pairs.
     for (let [light, dark] of colorPairings) {
       pairs += pair(key, light, dark);
       contrastPairs += contrastPair(key, light, dark);

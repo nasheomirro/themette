@@ -3,8 +3,13 @@ export type ColorShade = "50" | "100" | "200" | "300" | "400" | "500" | "600" | 
 
 export type ShadeSet = { [K in ColorShade]: string };
 
+export type ContrastSet = ShadeSet & {
+  light: string;
+  dark: string;
+};
+
 /** An object representing an idividual color set in a themette theme */
-export type ColorSet = { id: string; name: string; contrasts: ShadeSet } & ShadeSet;
+export type ColorSet = { id: string; name: string; contrasts: ContrastSet } & ShadeSet;
 
 /** The main data object of the application */
 export type ThemetteTheme = ColorSet[];

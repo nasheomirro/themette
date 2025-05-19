@@ -25,29 +25,33 @@
   --color-surface-950: oklch(18.22% 0 none);
 
   /* Color Contrasts */
-  --color-primary-contrast-50: var(--color-primary-950);
-  --color-primary-contrast-100: var(--color-primary-950);
-  --color-primary-contrast-200: var(--color-primary-950);
-  --color-primary-contrast-300: var(--color-primary-950);
-  --color-primary-contrast-400: var(--color-primary-950);
-  --color-primary-contrast-500: var(--color-primary-950);
-  --color-primary-contrast-600: var(--color-primary-50);
-  --color-primary-contrast-700: var(--color-primary-50);
-  --color-primary-contrast-800: var(--color-primary-50);
-  --color-primary-contrast-900: var(--color-primary-50);
-  --color-primary-contrast-950: var(--color-primary-50);
+  --color-primary-contrast-light: var(--color-primary-950);
+  --color-primary-contrast-dark: var(--color-primary-50);
+  --color-primary-contrast-50: var(--color-primary-contrast-light);
+  --color-primary-contrast-100: var(--color-primary-contrast-light);
+  --color-primary-contrast-200: var(--color-primary-contrast-light);
+  --color-primary-contrast-300: var(--color-primary-contrast-light);
+  --color-primary-contrast-400: var(--color-primary-contrast-light);
+  --color-primary-contrast-500: var(--color-primary-contrast-light);
+  --color-primary-contrast-600: var(--color-primary-contrast-dark);
+  --color-primary-contrast-700: var(--color-primary-contrast-dark);
+  --color-primary-contrast-800: var(--color-primary-contrast-dark);
+  --color-primary-contrast-900: var(--color-primary-contrast-dark);
+  --color-primary-contrast-950: var(--color-primary-contrast-dark);
 
-  --color-surface-contrast-50: var(--color-surface-950);
-  --color-surface-contrast-100: var(--color-surface-950);
-  --color-surface-contrast-200: var(--color-surface-950);
-  --color-surface-contrast-300: var(--color-surface-950);
-  --color-surface-contrast-400: var(--color-surface-950);
-  --color-surface-contrast-500: var(--color-surface-50);
-  --color-surface-contrast-600: var(--color-surface-50);
-  --color-surface-contrast-700: var(--color-surface-50);
-  --color-surface-contrast-800: var(--color-surface-50);
-  --color-surface-contrast-900: var(--color-surface-50);
-  --color-surface-contrast-950: var(--color-surface-50);
+  --color-surface-contrast-light: var(--color-surface-950);
+  --color-surface-contrast-dark: var(--color-surface-50);
+  --color-surface-contrast-50: var(--color-surface-contrast-light);
+  --color-surface-contrast-100: var(--color-surface-contrast-light);
+  --color-surface-contrast-200: var(--color-surface-contrast-light);
+  --color-surface-contrast-300: var(--color-surface-contrast-light);
+  --color-surface-contrast-400: var(--color-surface-contrast-light);
+  --color-surface-contrast-500: var(--color-surface-contrast-dark);
+  --color-surface-contrast-600: var(--color-surface-contrast-dark);
+  --color-surface-contrast-700: var(--color-surface-contrast-dark);
+  --color-surface-contrast-800: var(--color-surface-contrast-dark);
+  --color-surface-contrast-900: var(--color-surface-contrast-dark);
+  --color-surface-contrast-950: var(--color-surface-contrast-dark);
 }
 
 @theme inline {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import chroma from "chroma-js";
+  import chroma, { type Color } from "chroma-js";
 
   import { app } from "$lib/app/app.svelte";
   import { colorShades } from "$lib/app/constants";
@@ -8,6 +8,7 @@
     createContrastsForShadeSet,
     createShadeSetFromScale,
     genRandomColor,
+    genScale,
     genScaleFromColor,
   } from "$lib/app/utils";
 
@@ -16,48 +17,67 @@
   import RandomIcon from "~icons/lucide/dices";
   import RefreshIcon from "~icons/lucide/refresh-ccw";
 
-  type Props = {
-    set: ColorSet;
-  };
-
-  const { set }: Props = $props();
-
-  let editMode: "manual" | "linear" | "multicolor" | "seed" = $state("seed");
-
-  const options = [
+  const OPTIONS = [
     { value: "manual", label: "Manual" },
     { value: "linear", label: "Linear" },
     { value: "multicolor", label: "Multicolor" },
     { value: "seed", label: "Seed" },
   ];
 
-  const shades = $derived.by<ColorShade[]>(() => {
-    if (editMode === "manual") {
-      return colorShades;
-    } else if (editMode === "multicolor") {
-      return ["50", "500", "950"];
-    } else if (editMode === "linear") {
-      return ["50", "950"];
-    } else if (editMode === "seed") {
-      return ["500"];
-    }
+  type Props = {
+    set: ColorSet;
+  };
 
-    return colorShades;
-  });
+  const { set }: Props = $props();
 
-  const handleRandomGeneration = () => {
-    const seed = genRandomColor();
+  let editMode = $state<"manual" | "linear" | "multicolor" | "seed">("seed");
+
+  const shades = $derived<ColorShade[]>(
+    editMode === "manual"
+      ? colorShades
+      : editMode === "linear"
+        ? ["50", "950"]
+        : editMode === "multicolor"
+          ? ["50", "500", "950"]
+          : editMode === "seed"
+            ? ["500"]
+            : colorShades,
+  );
+
+  const handleSeedGeneration = (seed: string | Color) => {
     const shades = createShadeSetFromScale(genScaleFromColor(seed));
     const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
+
     app.updateColorSet(set.id, { ...shades, contrasts });
   };
+
+  const handleLinearGeneration = () => {
+    const shades = createShadeSetFromScale(genScale([set[50], set[950]]));
+    const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
+
+    app.updateColorSet(set.id, { ...shades, contrasts });
+  };
+
+  const handleMultiColorGeneration = () => {
+    const shades = createShadeSetFromScale(genScale([set[50], set[500], set[950]]));
+    const contrasts = createContrastsForShadeSet(shades, shades[50], shades[950]);
+
+    app.updateColorSet(set.id, { ...shades, contrasts });
+  };
+
+  $inspect(app.sets);
+
+  const handleColorChange = (value: string, shade: ColorShade) => {
+    if (chroma.valid(value)) {
+    }
+  }
 </script>
 
 <div>
   <div class="mb-8">
     <div class="flex gap-2 items-center justify-between mb-4">
       <div class="flex gap-1">
-        <button class="btn" onclick={handleRandomGeneration}>
+        <button class="btn" onclick={() => handleSeedGeneration(genRandomColor())}>
           <RandomIcon />
         </button>
         <button class="btn">
@@ -65,11 +85,11 @@
         </button>
       </div>
       <div class="w-30">
-        <Select type="single" items={options} placeholder="" triggerLabel="Set Editing Mode" bind:value={editMode} />
+        <Select type="single" items={OPTIONS} placeholder="" triggerLabel="Set Editing Mode" bind:value={editMode} />
       </div>
     </div>
     <div>
-      <h3 class="text-sm mb-2">{options.find((item) => item.value === editMode)?.label} Mode</h3>
+      <h3 class="text-sm mb-2">{OPTIONS.find((item) => item.value === editMode)?.label} Mode</h3>
       <p class="text-xs text-th-background-700-300 font-light">
         {#if editMode === "manual"}
           You can edit each shade manually, switch to other editing modes if you want to automatically interpolate
